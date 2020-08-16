@@ -7,33 +7,55 @@ const MAPBOX_API_KEY = 'pk.eyJ1IjoibmFzc2ltY2hlbm91ZiIsImEiOiJja2R1NjE2amMzYnl4M
 MapboxGL.setAccessToken(MAPBOX_API_KEY);
 MapboxGL.setConnected(true);
 
-const coordsLst = [ [-1.55459, 55.0198], [-1.5491, 53.8008], [-0.118092, 51.509865] ];
-const generateCoordsList = () => {
-  const coordsURLLst = [];
-  for (let i = 0; i < coordsLst.length; i++) {
-    coordsURLLst.push(coordsLst[i].join())
-  };
-  const coordsURLString = coordsURLLst.join(';');
-  return coordsURLString;
-};
-
-const routeCoordsString = generateCoordsList();
-
 const App = () => {
+  const [randomRouteCoords, setRandomRouteCoords] = useState({'coordinates': []});
   const [routeLineString, setRouteLineString] = useState({ "type": "LineString", "coordinates": [] });
-  
 
-  const fetchRouteCoords = async() => {
-    const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/${routeCoordsString}?alternatives=false&geometries=geojson&steps=true&access_token=${MAPBOX_API_KEY}`);
-    const data = await response.json();
-    setRouteLineString(data.routes[0].geometry);
+  const originLongitude = -1.55459;
+  const originLatitude = 55.0198;
+  const routeDistanceMeters = 5000;
+  
+  const fetchRandomCoords = async () => {
+    try{
+      const response = await fetch(`http://127.0.0.1:5000/test?longitude=${originLongitude}&latitude=${originLatitude}&routeDistance=${routeDistanceMeters}`);
+      const data = await response.json();
+      setRandomRouteCoords(data.coordinates);
+      //console.log(randomRouteCoords);
+    } catch (err) {
+      if (console) {
+        console.error(err);
+      };
+    };
+  };
+
+  const generateCoordsString = (coordsLst) => {
+    const coordsURLLst = [];
+    for (let i = 0; i < coordsLst.length; i++) {
+      coordsURLLst.push(coordsLst[i].join())
+    };
+    const coordsURLString = coordsURLLst.join(';');
+    return coordsURLString;
+  };
+
+  const routeCoordsString = generateCoordsString(randomRouteCoords);
+
+  const fetchRouteCoords = async () => {
+    try {
+      const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/${routeCoordsString}?alternatives=false&geometries=geojson&steps=true&access_token=${MAPBOX_API_KEY}`);
+      const data = await response.json();
+      setRouteLineString(data.routes[0].geometry);
+      console.log(data.routes[0].distance)
+    } catch (err) {
+      if (console) {
+        console.error(err);
+      }; 
+    };
   };
   
   useEffect(() => {
     fetchRouteCoords();
+    fetchRandomCoords();
   }, [])
-
-  console.log(routeLineString)
 
   return (
     <View style = {styles.page}>
@@ -42,6 +64,7 @@ const App = () => {
           <MapboxGL.ShapeSource id="origin" shape={routeLineString}>
             <MapboxGL.LineLayer id="routeFill" style={layerStyles.route} />
           </MapboxGL.ShapeSource>
+          <MapboxGL.PointAnnotation id="origin-point" coordinate={[-1.55459, 55.0198]} />
         </MapboxGL.MapView>
       </View>
     </View>
