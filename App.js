@@ -13,12 +13,26 @@ const destinationCoordinates = [-1.5491, 53.8008];
 
 const line = lineString([originCoordinates, destinationCoordinates]);
 
+
+
 const App = () => {
+  const [routeLineString, setRouteLineString] = useState({});
+
+  const fetchRouteCoords = async() => {
+    const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/-1.55459%2C55.0198%3B-1.5491%2C53.8008?alternatives=false&geometries=geojson&steps=true&access_token=pk.eyJ1IjoibmFzc2ltY2hlbm91ZiIsImEiOiJja2R1NjE2amMzYnl4MzByb3c5YmxlMGY5In0.cBj3YeAh0UMxinxOfhDLIw`);
+    const data = await response.json();
+    setRouteLineString(data.routes[0].geometry);
+  };
+  
+  useEffect(() => {
+    fetchRouteCoords();
+  }, [])
+
   return (
     <View style = {styles.page}>
       <View style = {styles.container}>
         <MapboxGL.MapView style = {styles.map} >
-          <MapboxGL.ShapeSource id="origin" shape={line.geometry}>
+          <MapboxGL.ShapeSource id="origin" shape={routeLineString}>
             <MapboxGL.LineLayer id="routeFill" style={layerStyles.route} />
           </MapboxGL.ShapeSource>
         </MapboxGL.MapView>
