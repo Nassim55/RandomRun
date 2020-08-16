@@ -13,11 +13,11 @@ const App = () => {
 
   const originLongitude = -1.55459;
   const originLatitude = 55.0198;
-  const routeDistanceMeters = 5000;
+  const routeDistanceMeters = 2000;
   
   const fetchRandomCoords = async () => {
     try{
-      const response = await fetch(`http://127.0.0.1:5000/test?longitude=${originLongitude}&latitude=${originLatitude}&routeDistance=${routeDistanceMeters}`);
+      const response = await fetch(`http://127.0.0.1:5000/route?longitude=${originLongitude}&latitude=${originLatitude}&routeDistance=${routeDistanceMeters}`);
       const data = await response.json();
       setRandomRouteCoords(data.coordinates);
       //console.log(randomRouteCoords);
@@ -41,10 +41,19 @@ const App = () => {
 
   const fetchRouteCoords = async () => {
     try {
-      const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/${routeCoordsString}?alternatives=false&geometries=geojson&steps=true&access_token=${MAPBOX_API_KEY}`);
+      const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/${routeCoordsString}?alternatives=false&geometries=geojson&steps=true&&continue_straight=true&access_token=${MAPBOX_API_KEY}`);
       const data = await response.json();
       setRouteLineString(data.routes[0].geometry);
       console.log(data.routes[0].distance)
+      if (data.routes[0].distance > routeDistanceMeters) {
+        for (let i = 0; i < 10; i++) {
+          if (data.routes[0].distance > routeDistanceMeters) {
+            console.log('greater') 
+          } else {
+            break;
+          }
+        }
+      } 
     } catch (err) {
       if (console) {
         console.error(err);
