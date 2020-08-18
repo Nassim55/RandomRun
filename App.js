@@ -12,10 +12,11 @@ const App = () => {
   const [randomRouteCoords, setRandomRouteCoords] = useState({'coordinates': []});
   const [randomRouteCoordsLineString, setRandomRouteCoordsLineString] = useState({ "type": "LineString", "coordinates": [] });
   const [routeLineString, setRouteLineString] = useState({ "type": "LineString", "coordinates": [] });
+  const [optimisedRouteLineString, setOptimisedRouteLineString] = useState({ "type": "LineString", "coordinates": [] });
 
   const originLongitude = -1.55459;
   const originLatitude = 55.0198;
-  const routeDistanceMeters = 3000;
+  const routeDistanceMeters = 2000;
   
   const fetchRandomCoords = async () => {
     try{
@@ -47,10 +48,8 @@ const App = () => {
       const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/${routeCoordsString}?alternatives=false&geometries=geojson&steps=true&continue_straight=true&access_token=${MAPBOX_API_KEY}`);
       const data = await response.json();
       setRouteLineString(data.routes[0].geometry);
-      console.log(data.routes[0].distance)
       if (data.routes[0].distance > routeDistanceMeters) {
         try {
-          console.log('optimising')
           const scaleResponse = await fetch(`http://127.0.0.1:5000/optimise`, {
             method: 'POST',
             headers: {
@@ -62,7 +61,7 @@ const App = () => {
           });
           const scaledData = await scaleResponse.json();
           console.log(scaledData.distanceMeters);
-          setRouteLineString({ 'type': 'LineString', 'coordinates': scaledData.coordinates });
+          setOptimisedRouteLineString({ 'type': 'LineString', 'coordinates': scaledData.coordinates });
         } catch (err) {
           if (console) {
             console.error(err);
@@ -88,8 +87,8 @@ const App = () => {
           <MapboxGL.ShapeSource id="origin" shape={routeLineString}>
             <MapboxGL.LineLayer id="routeFill" style={layerStyles.route} />
           </MapboxGL.ShapeSource>
-          <MapboxGL.ShapeSource id="line" shape={randomRouteCoordsLineString}>
-            <MapboxGL.LineLayer id="randomLine" style={layerStyles.randomRouteLine} />
+          <MapboxGL.ShapeSource id="optimised" shape={optimisedRouteLineString}>
+            <MapboxGL.LineLayer id="optimisedLine" style={layerStyles.optimisedRouteLine} />
           </MapboxGL.ShapeSource>
           <MapboxGL.PointAnnotation id="origin-point" coordinate={[-1.55459, 55.0198]} />
         </MapboxGL.MapView>
@@ -128,7 +127,19 @@ const layerStyles = {
     lineWidth: 2,
     lineOpacity: 0.84,
   },
+  optimisedRouteLine: {
+    lineColor: 'blue',
+    lineCap: MapboxGL.LineJoin.Round,
+    lineWidth: 2,
+    lineOpacity: 0.84,
+  },
 };
 
 
 export default App;
+
+/*
+          <MapboxGL.ShapeSource id="line" shape={randomRouteCoordsLineString}>
+            <MapboxGL.LineLayer id="randomLine" style={layerStyles.randomRouteLine} />
+          </MapboxGL.ShapeSource>
+*/
