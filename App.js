@@ -13,6 +13,7 @@ const App = () => {
   const [randomRouteCoordsLineString, setRandomRouteCoordsLineString] = useState({ "type": "LineString", "coordinates": [] });
   const [routeLineString, setRouteLineString] = useState({ "type": "LineString", "coordinates": [] });
   const [optimisedRouteLineString, setOptimisedRouteLineString] = useState({ "type": "LineString", "coordinates": [] });
+  const [finalLineString, setFinalLineString] = useState({ "type": "LineString", "coordinates": [] });
 
   const originLongitude = -1.55459;
   const originLatitude = 55.0198;
@@ -41,14 +42,14 @@ const App = () => {
   };
 
   const routeCoordsString = generateCoordsString(randomRouteCoords);
-  console.log(routeCoordsString)
+
+
 
   const fetchRouteCoords = async () => {
     try {
-      const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/${routeCoordsString}?alternatives=false&geometries=geojson&steps=true&continue_straight=true&access_token=${MAPBOX_API_KEY}`);
+      const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/${routeCoordsString}?alternatives=false&geometries=geojson&steps=true&continue_straight=false&access_token=${MAPBOX_API_KEY}`);
       const data = await response.json();
       setRouteLineString(data.routes[0].geometry);
-      console.log(data.routes[0].distance)
       if (data.routes[0].distance > routeDistanceMeters) {
         try {
           const scaleResponse = await fetch(`http://127.0.0.1:5000/optimise`, {
@@ -61,17 +62,32 @@ const App = () => {
             })
           });
           const scaledData = await scaleResponse.json();
-          console.log(scaledData.distanceMeters);
           setOptimisedRouteLineString({ 'type': 'LineString', 'coordinates': scaledData.coordinates });
-          
-          try{
-            const recalculateRouteString = scaledData.recalculateRouteString
-            const recalculateResponse = await fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/${recalculateRouteString}?alternatives=false&geometries=geojson&steps=true&continue_straight=true&access_token=${MAPBOX_API_KEY}`);
-            const recalculatedData = recalculateResponse.json()
-            console.log(recalculateResponse);
+          const recalculatePoints = scaledData.recalculatePoints
+          try {
+            const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/${recalculatePoints}?alternatives=false&geometries=geojson&steps=true&continue_straight=false&access_token=${MAPBOX_API_KEY}`);
+            const data = await response.json()
+            try {
+              const response = await fetch('http://127.0.0.1:5000/finilise', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                  "finilisedGapCoordinates": data.routes[0].geometry.coordinates
+                })
+              });
+              const finiliseData = await response.json()
+              setFinalLineString({ 'type': 'LineString', 'coordinates': finiliseData.coordinates })
+              console.log(finiliseData.distanceMeters)
+            } catch (err) {
+              if (console) {
+                console.error(err)
+              }
+            }
           } catch (err) {
             if (console) {
-              console.error(err);
+              console.error(err)
             }
           }
         } catch (err) {
@@ -80,12 +96,18 @@ const App = () => {
           }
         };
       }
+      else {
+        setFinalLineString(data.routes[0].geometry)
+        console.log(data.routes[0].distance)
+      }
     } catch (err) {
       if (console) {
         console.error(err);
       }; 
     };
   };
+
+
   
   useEffect(() => {
     fetchRouteCoords();
@@ -96,10 +118,7 @@ const App = () => {
     <View style = {styles.page}>
       <View style = {styles.container}>
         <MapboxGL.MapView style = {styles.map} >
-          <MapboxGL.ShapeSource id="origin" shape={routeLineString}>
-            <MapboxGL.LineLayer id="routeFill" style={layerStyles.route} />
-          </MapboxGL.ShapeSource>
-          <MapboxGL.ShapeSource id="optimised" shape={optimisedRouteLineString}>
+          <MapboxGL.ShapeSource id="optimised" shape={finalLineString}>
             <MapboxGL.LineLayer id="optimisedLine" style={layerStyles.optimisedRouteLine} />
           </MapboxGL.ShapeSource>
           <MapboxGL.PointAnnotation id="origin-point" coordinate={[-1.55459, 55.0198]} />
@@ -140,7 +159,7 @@ const layerStyles = {
     lineOpacity: 0.84,
   },
   optimisedRouteLine: {
-    lineColor: 'blue',
+    lineColor: 'green',
     lineCap: MapboxGL.LineJoin.Round,
     lineWidth: 2,
     lineOpacity: 0.84,
@@ -151,8 +170,11 @@ const layerStyles = {
 export default App;
 
 /*
-          <MapboxGL.ShapeSource id="line" shape={randomRouteCoordsLineString}>
-            <MapboxGL.LineLayer id="randomLine" style={layerStyles.randomRouteLine} />
+          <MapboxGL.ShapeSource id="origin" shape={routeLineString}>
+            <MapboxGL.LineLayer id="routeFill" style={layerStyles.route} />
+          </MapboxGL.ShapeSource>
+          <MapboxGL.ShapeSource id="optimised" shape={finalLineString}>
+            <MapboxGL.LineLayer id="optimisedLine" style={layerStyles.optimisedRouteLine} />
           </MapboxGL.ShapeSource>
 
 */
