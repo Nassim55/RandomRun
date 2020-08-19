@@ -16,7 +16,7 @@ const App = () => {
 
   const originLongitude = -1.55459;
   const originLatitude = 55.0198;
-  const routeDistanceMeters = 2000;
+  const routeDistanceMeters = 5000;
   
   const fetchRandomCoords = async () => {
     try{
@@ -41,13 +41,14 @@ const App = () => {
   };
 
   const routeCoordsString = generateCoordsString(randomRouteCoords);
-  
+  console.log(routeCoordsString)
 
   const fetchRouteCoords = async () => {
     try {
       const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/${routeCoordsString}?alternatives=false&geometries=geojson&steps=true&continue_straight=true&access_token=${MAPBOX_API_KEY}`);
       const data = await response.json();
       setRouteLineString(data.routes[0].geometry);
+      console.log(data.routes[0].distance)
       if (data.routes[0].distance > routeDistanceMeters) {
         try {
           const scaleResponse = await fetch(`http://127.0.0.1:5000/optimise`, {
@@ -62,6 +63,17 @@ const App = () => {
           const scaledData = await scaleResponse.json();
           console.log(scaledData.distanceMeters);
           setOptimisedRouteLineString({ 'type': 'LineString', 'coordinates': scaledData.coordinates });
+          
+          try{
+            const recalculateRouteString = scaledData.recalculateRouteString
+            const recalculateResponse = await fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/${recalculateRouteString}?alternatives=false&geometries=geojson&steps=true&continue_straight=true&access_token=${MAPBOX_API_KEY}`);
+            const recalculatedData = recalculateResponse.json()
+            console.log(recalculateResponse);
+          } catch (err) {
+            if (console) {
+              console.error(err);
+            }
+          }
         } catch (err) {
           if (console) {
             console.error(err);
@@ -142,4 +154,5 @@ export default App;
           <MapboxGL.ShapeSource id="line" shape={randomRouteCoordsLineString}>
             <MapboxGL.LineLayer id="randomLine" style={layerStyles.randomRouteLine} />
           </MapboxGL.ShapeSource>
+
 */
