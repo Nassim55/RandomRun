@@ -11,6 +11,7 @@
     "android-dev": "adb reverse tcp:5000 tcp:5000"
   },
   "dependencies": {
+    "@react-native-community/geolocation": "^2.0.2",
     "@react-native-mapbox-gl/maps": "^8.1.0-rc.2",
     "react": "16.13.1",
     "react-native": "0.63.2"

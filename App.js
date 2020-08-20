@@ -1,12 +1,43 @@
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Dimensions } from 'react-native';
+import { StyleSheet, View, Text, Dimensions, PermissionsAndroid } from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import { lineString } from '@turf/helpers';
+import Geolocation from '@react-native-community/geolocation';
+
 
 const MAPBOX_API_KEY = 'pk.eyJ1IjoibmFzc2ltY2hlbm91ZiIsImEiOiJja2R1NjE2amMzYnl4MzByb3c5YmxlMGY5In0.cBj3YeAh0UMxinxOfhDLIw';
 
 MapboxGL.setAccessToken(MAPBOX_API_KEY);
 MapboxGL.setConnected(true);
+
+
+//let originLongitude = -1.55459;
+//let originLatitude = 55.0198;
+
+
+
+
+const requestUserLocation = async () => {
+  try {
+    const granted = await PermissionsAndroid.request(
+      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
+      {
+        title: "Random Run Location Permission",
+        message: "Random Run needs access to your location in order to generate a route",
+        buttonNeutral: "Ask Me Later",
+        buttonNegative: "Cancel",
+        buttonPositive: "OK"
+      }
+    );
+    return granted
+  } catch (err) {
+    if (console) {
+      console.error(err);
+    }
+  }
+};
+
+ 
 
 const App = () => {
   const [randomRouteCoords, setRandomRouteCoords] = useState({'coordinates': []});
@@ -14,13 +45,33 @@ const App = () => {
   const [routeLineString, setRouteLineString] = useState({ "type": "LineString", "coordinates": [] });
   const [optimisedRouteLineString, setOptimisedRouteLineString] = useState({ "type": "LineString", "coordinates": [] });
   const [finalLineString, setFinalLineString] = useState({ "type": "LineString", "coordinates": [] });
+  const [originLongitude, setOriginLongitude] = useState('0')
+  const [originLatitude, setOriginLatitude] = useState('0')
 
-  const originLongitude = -1.55459;
-  const originLatitude = 55.0198;
-  const routeDistanceMeters = 5000;
+
+  const routeDistanceMeters = 3000;
+
+  const getsUserLocation = async () => {
+    try {
+      const granted = await requestUserLocation();
+      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+        Geolocation.getCurrentPosition(info => {
+          setOriginLongitude(info.coords.longitude)
+          setOriginLatitude(info.coords.latitude)
+        });
+      } else {
+        console.log('Location not granted');
+      }
+    } catch (err) {
+      if (console) {
+        console.error(err);
+      }
+    }
+  };
   
   const fetchRandomCoords = async () => {
-    try{
+    try {
+      await getsUserLocation();
       const response = await fetch(`http://127.0.0.1:5000/route?longitude=${originLongitude}&latitude=${originLatitude}&routeDistance=${routeDistanceMeters}`);
       const data = await response.json();
       setRandomRouteCoords(data.coordinates);
@@ -110,8 +161,8 @@ const App = () => {
 
   
   useEffect(() => {
-    fetchRouteCoords();
     fetchRandomCoords();
+    fetchRouteCoords();
   }, [])
 
   return (
@@ -121,7 +172,7 @@ const App = () => {
           <MapboxGL.ShapeSource id="optimised" shape={finalLineString}>
             <MapboxGL.LineLayer id="optimisedLine" style={layerStyles.optimisedRouteLine} />
           </MapboxGL.ShapeSource>
-          <MapboxGL.PointAnnotation id="origin-point" coordinate={[-1.55459, 55.0198]} />
+          <MapboxGL.PointAnnotation id="origin-point" coordinate={[originLongitude, originLatitude]} />
         </MapboxGL.MapView>
       </View>
     </View>
