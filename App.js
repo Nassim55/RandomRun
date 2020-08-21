@@ -3,19 +3,16 @@ import { StyleSheet, View, Text, Dimensions, PermissionsAndroid } from 'react-na
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import { lineString } from '@turf/helpers';
 import Geolocation from '@react-native-community/geolocation';
+import RouteInfoCard from './app/components/RouteInfoCard';
+
+import { store } from './store/store'
+import { Provider } from 'react-redux';
 
 
 const MAPBOX_API_KEY = 'pk.eyJ1IjoibmFzc2ltY2hlbm91ZiIsImEiOiJja2R1NjE2amMzYnl4MzByb3c5YmxlMGY5In0.cBj3YeAh0UMxinxOfhDLIw';
 
 MapboxGL.setAccessToken(MAPBOX_API_KEY);
 MapboxGL.setConnected(true);
-
-
-//let originLongitude = -1.55459;
-//let originLatitude = 55.0198;
-
-
-
 
 const requestUserLocation = async () => {
   try {
@@ -47,9 +44,11 @@ const App = () => {
   const [finalLineString, setFinalLineString] = useState({ "type": "LineString", "coordinates": [] });
   const [originLongitude, setOriginLongitude] = useState('0')
   const [originLatitude, setOriginLatitude] = useState('0')
+  const [displayRouteDistance, setDisplayRouteDistance] = useState(0)
 
 
-  const routeDistanceMeters = 3000;
+
+  const routeDistanceMeters = 4000;
 
   const getsUserLocation = async () => {
     try {
@@ -131,6 +130,7 @@ const App = () => {
               const finiliseData = await response.json()
               setFinalLineString({ 'type': 'LineString', 'coordinates': finiliseData.coordinates })
               console.log(finiliseData.distanceMeters)
+              setDisplayRouteDistance(finiliseData.distanceMeters)
             } catch (err) {
               if (console) {
                 console.error(err)
@@ -150,6 +150,7 @@ const App = () => {
       else {
         setFinalLineString(data.routes[0].geometry)
         console.log(data.routes[0].distance)
+        setDisplayRouteDistance(data.routes[0].distance)
       }
     } catch (err) {
       if (console) {
@@ -166,22 +167,27 @@ const App = () => {
   }, [])
 
   return (
-    <View style = {styles.page}>
-      <View style = {styles.container}>
-        <MapboxGL.MapView style = {styles.map} >
-          <MapboxGL.ShapeSource id="optimised" shape={finalLineString}>
-            <MapboxGL.LineLayer id="optimisedLine" style={layerStyles.optimisedRouteLine} />
-          </MapboxGL.ShapeSource>
-          <MapboxGL.PointAnnotation id="origin-point" coordinate={[originLongitude, originLatitude]} />
-        </MapboxGL.MapView>
+    <Provider store={store}>
+      <View style = {styles.page}>
+        <View style = {styles.container}>
+          <MapboxGL.MapView style = {styles.map} >
+            <MapboxGL.ShapeSource id="optimised" shape={finalLineString}>
+              <MapboxGL.LineLayer id="optimisedLine" style={layerStyles.optimisedRouteLine} />
+            </MapboxGL.ShapeSource>
+            <MapboxGL.PointAnnotation id="origin-point" coordinate={[originLongitude, originLatitude]} />
+          </MapboxGL.MapView>
+          <RouteInfoCard displayRouteDistance={displayRouteDistance} />
+        </View>
       </View>
-    </View>
+    </Provider>
   );
 };
 
 const styles = StyleSheet.create({
   page: {
     flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
     justifyContent: "center",
     alignItems: "center",
     backgroundColor: "#F5FCFF"
@@ -193,7 +199,7 @@ const styles = StyleSheet.create({
   },
   map: {
     flex: 1,
-  },
+  }
 });
 
 const layerStyles = {
