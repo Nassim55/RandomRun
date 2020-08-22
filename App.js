@@ -4,10 +4,7 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import { lineString } from '@turf/helpers';
 import Geolocation from '@react-native-community/geolocation';
 import RouteInfoCard from './app/components/RouteInfoCard';
-
-import { store } from './store/store'
-import { Provider } from 'react-redux';
-
+import { useSelector } from 'react-redux';
 
 const MAPBOX_API_KEY = 'pk.eyJ1IjoibmFzc2ltY2hlbm91ZiIsImEiOiJja2R1NjE2amMzYnl4MzByb3c5YmxlMGY5In0.cBj3YeAh0UMxinxOfhDLIw';
 
@@ -35,8 +32,10 @@ const requestUserLocation = async () => {
 };
 
  
-
 const App = () => {
+  const routeDistanceMeters = useSelector(state => state.routeDistanceMeters);
+
+
   const [randomRouteCoords, setRandomRouteCoords] = useState({'coordinates': []});
   const [randomRouteCoordsLineString, setRandomRouteCoordsLineString] = useState({ "type": "LineString", "coordinates": [] });
   const [routeLineString, setRouteLineString] = useState({ "type": "LineString", "coordinates": [] });
@@ -47,8 +46,7 @@ const App = () => {
   const [displayRouteDistance, setDisplayRouteDistance] = useState(0)
 
 
-
-  const routeDistanceMeters = 4000;
+  
 
   const getsUserLocation = async () => {
     try {
@@ -167,31 +165,21 @@ const App = () => {
   }, [])
 
   return (
-    <Provider store={store}>
-      <View style = {styles.page}>
-        <View style = {styles.container}>
-          <MapboxGL.MapView style = {styles.map} >
-            <MapboxGL.ShapeSource id="optimised" shape={finalLineString}>
-              <MapboxGL.LineLayer id="optimisedLine" style={layerStyles.optimisedRouteLine} />
-            </MapboxGL.ShapeSource>
-            <MapboxGL.PointAnnotation id="origin-point" coordinate={[originLongitude, originLatitude]} />
-          </MapboxGL.MapView>
-          <RouteInfoCard displayRouteDistance={displayRouteDistance} />
-        </View>
+    <View style = {styles.page}>
+      <View style = {styles.container}>
+        <MapboxGL.MapView style = {styles.map} >
+          <MapboxGL.ShapeSource id="optimised" shape={finalLineString}>
+            <MapboxGL.LineLayer id="optimisedLine" style={layerStyles.optimisedRouteLine} />
+          </MapboxGL.ShapeSource>
+          <MapboxGL.PointAnnotation id="origin-point" coordinate={[originLongitude, originLatitude]} />
+        </MapboxGL.MapView>
+        <RouteInfoCard displayRouteDistance={displayRouteDistance} />
       </View>
-    </Provider>
+    </View>
   );
 };
 
 const styles = StyleSheet.create({
-  page: {
-    flex: 1,
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: "center",
-    alignItems: "center",
-    backgroundColor: "#F5FCFF"
-  },
   container: {
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,

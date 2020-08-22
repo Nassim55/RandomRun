@@ -1,33 +1,33 @@
 import React from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity, Button } from 'react-native';
-import { useSelector, useDispatch } from 'react-redux';
 
-import { addition, subtraction } from '../../store/actions';
+import { useDispatch, useSelector } from 'react-redux';
+import { setRouteDistanceMeters } from '../../store/actions';
 
 const RouteInfoCard = (props) => {
-    const data = useSelector(state => state.counter)
+    const routeDistanceMeters = useSelector(state => state.routeDistanceMeters);
     const dispatch = useDispatch();
 
     return (
         <View style={styles.routeDetails}>
             <Text>Generate your route:</Text> 
-            <TextInput 
-            style={styles.routeDistanceInput}
-            placeholder='Enter a route distance in meters...'
-            underlineColorAndroid={'transparent'} />
+            <TextInput
+            style = {styles.routeDistanceInput}
+            placeholder = 'Enter a route distance in meters...'
+            underlineColorAndroid = {'transparent'}
+            onChangeText = {text => { if (isNaN(text) === false) dispatch(setRouteDistanceMeters(parseFloat(text)))}} />
             <Button
-            onPress={console.log('hello')}
             title="Learn More"
             color="#841584"
             accessibilityLabel="Learn more about this purple button" />
-            <Text onPress={() => dispatch(subtraction())}>Route Details</Text>
+            <Text >Route Details</Text>
             <Text>Distance: {(props.displayRouteDistance / 1000).toFixed(2)}km</Text>
-            <Text onPress={() => dispatch(addition())}>
-                {data}
+            <Text>
+                {routeDistanceMeters}
             </Text>
         </View>
     );
-};
+}; 
 
 const styles = StyleSheet.create({
     routeDetails: {
