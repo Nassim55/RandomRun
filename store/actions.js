@@ -1,7 +1,8 @@
 import { 
     IS_LOCATION_PERMISSION_GRANTED,
     SET_USER_LOCATION,
-    SET_ROUTE_DISTANCE_METERS
+    SET_ROUTE_DISTANCE_METERS,
+    SET_RANDOM_POLYGON_COORDINATES
 } from './actionTypes';
 
 // We now need to build 'action creators', theses are basically just
@@ -9,18 +10,23 @@ import {
 // type is called, our reducers know how to modify the state.
 
 // Defining the action type. All an action is, is a function that returns an object:
-export const isLocationPermissionGranted = (props) => ({
+export const isLocationPermissionGranted = (isLocationPermissionGranted) => ({
     type: IS_LOCATION_PERMISSION_GRANTED,
-    isLocationPermissionGranted: props
+    isLocationPermissionGranted: isLocationPermissionGranted
 });
 
-export const setUserLocation = (props = [0, 0]) => ({
+export const setUserLocation = (userLongitudeAndLatitude) => ({
     type: SET_USER_LOCATION,
-    userLongitude: props[0],
-    userLatitude: props[1]
+    userLongitude: userLongitudeAndLatitude[0],
+    userLatitude: userLongitudeAndLatitude[1]
 });
 
-export const setRouteDistanceMeters = (props = 0) => ({
+export const setRouteDistanceMeters = (userInputRouteDistanceMeters) => ({
     type: SET_ROUTE_DISTANCE_METERS,
-    userInputRouteDistanceMeters: props
+    userInputRouteDistanceMeters: userInputRouteDistanceMeters
+});
+
+export const setRandomPolygonCoordinates = (randomPolygonCoords) => ({
+    type: SET_RANDOM_POLYGON_COORDINATES,
+    randomPolygonCoords: {'coordinates': randomPolygonCoords}
 });

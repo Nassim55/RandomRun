@@ -1,5 +1,6 @@
 import Geolocation from '@react-native-community/geolocation';
 import { setUserLocation } from '../../store/actions';
+import requestLocationPermission from './requestLocationPermission';
 
 const getUserLocation = async (isLocationPermissionGranted, dispatch) => {
     try {

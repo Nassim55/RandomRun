@@ -2,7 +2,8 @@
 import { 
     IS_LOCATION_PERMISSION_GRANTED,
     SET_USER_LOCATION,
-    SET_ROUTE_DISTANCE_METERS
+    SET_ROUTE_DISTANCE_METERS,
+    SET_RANDOM_POLYGON_COORDINATES,
 } from './actionTypes';
 
 const initialState = {
@@ -10,6 +11,7 @@ const initialState = {
     userLongitude: 0,
     userLatitude: 0,
     routeDistanceMeters: 0,
+    randomPolygonCoords: { 'coordinates': [] },
 };
 
 // We now describe how our state will be modified when either addition or subtraction is called:
@@ -27,10 +29,14 @@ export const reducer = (state = initialState, action) => {
                 userLatitude: action.userLatitude
             }
         case SET_ROUTE_DISTANCE_METERS:
-            console.log(state)
             return {
                 ...state,
                 routeDistanceMeters: action.userInputRouteDistanceMeters
+            }
+        case SET_RANDOM_POLYGON_COORDINATES:
+            return { 
+                ...state,
+                randomPolygonCoords: action.randomPolygonCoords
             }
         default:
             return state;
