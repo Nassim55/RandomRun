@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { StyleSheet, View, Text, Dimensions, PermissionsAndroid } from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import { lineString } from '@turf/helpers';
-import Geolocation from '@react-native-community/geolocation';
+
 import RouteInfoCard from './app/components/RouteInfoCard';
 import { useDispatch, useSelector } from 'react-redux';
-import { isLocationPermissionGranted } from './store/actions';
+
 
 import requestLocationPermission from './app/functions/requestLocationPermission';
+import getUserLocation from'./app/functions/getUserLocation';
+
 
 const MAPBOX_API_KEY = 'pk.eyJ1IjoibmFzc2ltY2hlbm91ZiIsImEiOiJja2R1NjE2amMzYnl4MzByb3c5YmxlMGY5In0.cBj3YeAh0UMxinxOfhDLIw';
 
@@ -16,45 +18,25 @@ MapboxGL.setConnected(true);
 
 const App = () => {
   const dispatch = useDispatch();
-
+  
+  // Requesting permission for user location, setting true or false in redux state:
   requestLocationPermission(dispatch);
   const isLocationPermissionGranted = useSelector(state => state.isLocationPermissionGranted);
 
+  // Defining route characteristic from redux state:
+  const originLongitude = useSelector(state => state.userLongitude);
+  const originLatitude =  useSelector(state => state.userLatitude);
   const routeDistanceMeters = useSelector(state => state.routeDistanceMeters);
 
-  
   const [randomRouteCoords, setRandomRouteCoords] = useState({'coordinates': []});
   const [finalLineString, setFinalLineString] = useState({ "type": "LineString", "coordinates": [] });
-  const [originLongitude, setOriginLongitude] = useState('0')
-  const [originLatitude, setOriginLatitude] = useState('0')
+
   const [displayRouteDistance, setDisplayRouteDistance] = useState(0)
 
 
-  
-
-  const getUserLocation = async (isLocationPermissionGranted) => {
-    try {
-      console.log(isLocationPermissionGranted)
-      if (isLocationPermissionGranted === true) {
-        
-        Geolocation.getCurrentPosition(info => {
-          setOriginLongitude(info.coords.longitude)
-          setOriginLatitude(info.coords.latitude)
-          console.log(info)
-        });
-      } else {
-        console.log('Location not granted');
-      }
-    } catch (err) {
-      if (console) {
-        console.error(err);
-      }
-    }
-  };
-  
   const fetchRandomCoords = async () => {
     try {
-      await getUserLocation(isLocationPermissionGranted);
+      await getUserLocation(isLocationPermissionGranted, dispatch);
       const response = await fetch(`http://127.0.0.1:5000/route?longitude=${originLongitude}&latitude=${originLatitude}&routeDistance=${routeDistanceMeters}`);
       const data = await response.json();
       setRandomRouteCoords(data.coordinates);

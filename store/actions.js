@@ -1,6 +1,6 @@
 import { 
     IS_LOCATION_PERMISSION_GRANTED,
-    GET_USER_CURRENT_LOCATION,
+    SET_USER_LOCATION,
     SET_ROUTE_DISTANCE_METERS
 } from './actionTypes';
 
@@ -14,8 +14,10 @@ export const isLocationPermissionGranted = (props) => ({
     isLocationPermissionGranted: props
 });
 
-export const getUserCurrentLocation = () => ({
-    type: GET_USER_CURRENT_LOCATION
+export const setUserLocation = (props = [0, 0]) => ({
+    type: SET_USER_LOCATION,
+    userLongitude: props[0],
+    userLatitude: props[1]
 });
 
 export const setRouteDistanceMeters = (props = 0) => ({
