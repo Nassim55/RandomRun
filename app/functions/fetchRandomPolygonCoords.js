@@ -14,11 +14,18 @@ const fetchRandomPolygonCoords = async (
             try {
                 await getUserLocation(isLocationPermissionGranted, dispatch);
                 if (isLocationPermissionGranted === true) {
-                    console.log('hello')
                     const response = await fetch(`http://127.0.0.1:5000/route?longitude=${originLongitude}&latitude=${originLatitude}&routeDistance=${routeDistanceMeters}`);
                     const data = await response.json();
                     dispatch(setRandomPolygonCoordinates(data.coordinates))
                     
+                    // Returns a URL string of coords for Mapbox API:
+                    const coordsURLLst = [];
+                    for (let i = 0; i < data.coordinates.length; i++) {
+                        coordsURLLst.push(data.coordinates[i].join())
+                    };
+                    const coordsURLString = coordsURLLst.join(';');
+                    console.log(coordsURLString)
+                    return coordsURLString;
                 }
             } catch (err) {
                 if (console) {
