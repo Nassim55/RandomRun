@@ -13,7 +13,7 @@ const RouteInfoCard = (props) => {
             <Text>Generate your route:</Text> 
             <TextInput
             style = {styles.routeDistanceInput}
-            placeholder = 'Enter a route distance in meters...'
+            placeholder = 'Approximate route distance in meters...'
             underlineColorAndroid = {'transparent'}
             onChangeText = {text => { if (isNaN(text) === false) dispatch(setRouteDistanceMeters(parseFloat(text)))}} />
             <Button

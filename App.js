@@ -4,42 +4,26 @@ import MapboxGL from '@react-native-mapbox-gl/maps';
 import { lineString } from '@turf/helpers';
 import Geolocation from '@react-native-community/geolocation';
 import RouteInfoCard from './app/components/RouteInfoCard';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
+import { isLocationPermissionGranted } from './store/actions';
+
+import requestLocationPermission from './app/functions/requestLocationPermission';
 
 const MAPBOX_API_KEY = 'pk.eyJ1IjoibmFzc2ltY2hlbm91ZiIsImEiOiJja2R1NjE2amMzYnl4MzByb3c5YmxlMGY5In0.cBj3YeAh0UMxinxOfhDLIw';
 
 MapboxGL.setAccessToken(MAPBOX_API_KEY);
 MapboxGL.setConnected(true);
 
-const requestUserLocation = async () => {
-  try {
-    const granted = await PermissionsAndroid.request(
-      PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION,
-      {
-        title: "Random Run Location Permission",
-        message: "Random Run needs access to your location in order to generate a route",
-        buttonNeutral: "Ask Me Later",
-        buttonNegative: "Cancel",
-        buttonPositive: "OK"
-      }
-    );
-    return granted
-  } catch (err) {
-    if (console) {
-      console.error(err);
-    }
-  }
-};
-
- 
 const App = () => {
+  const dispatch = useDispatch();
+
+  requestLocationPermission(dispatch);
+  const isLocationPermissionGranted = useSelector(state => state.isLocationPermissionGranted);
+
   const routeDistanceMeters = useSelector(state => state.routeDistanceMeters);
 
-
+  
   const [randomRouteCoords, setRandomRouteCoords] = useState({'coordinates': []});
-  const [randomRouteCoordsLineString, setRandomRouteCoordsLineString] = useState({ "type": "LineString", "coordinates": [] });
-  const [routeLineString, setRouteLineString] = useState({ "type": "LineString", "coordinates": [] });
-  const [optimisedRouteLineString, setOptimisedRouteLineString] = useState({ "type": "LineString", "coordinates": [] });
   const [finalLineString, setFinalLineString] = useState({ "type": "LineString", "coordinates": [] });
   const [originLongitude, setOriginLongitude] = useState('0')
   const [originLatitude, setOriginLatitude] = useState('0')
@@ -48,13 +32,15 @@ const App = () => {
 
   
 
-  const getsUserLocation = async () => {
+  const getUserLocation = async (isLocationPermissionGranted) => {
     try {
-      const granted = await requestUserLocation();
-      if (granted === PermissionsAndroid.RESULTS.GRANTED) {
+      console.log(isLocationPermissionGranted)
+      if (isLocationPermissionGranted === true) {
+        
         Geolocation.getCurrentPosition(info => {
           setOriginLongitude(info.coords.longitude)
           setOriginLatitude(info.coords.latitude)
+          console.log(info)
         });
       } else {
         console.log('Location not granted');
@@ -68,11 +54,11 @@ const App = () => {
   
   const fetchRandomCoords = async () => {
     try {
-      await getsUserLocation();
+      await getUserLocation(isLocationPermissionGranted);
       const response = await fetch(`http://127.0.0.1:5000/route?longitude=${originLongitude}&latitude=${originLatitude}&routeDistance=${routeDistanceMeters}`);
       const data = await response.json();
       setRandomRouteCoords(data.coordinates);
-      setRandomRouteCoordsLineString(lineString(data.coordinates))
+
     } catch (err) {
       if (console) {
         console.error(err);
@@ -97,7 +83,6 @@ const App = () => {
     try {
       const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/${routeCoordsString}?alternatives=false&geometries=geojson&steps=true&continue_straight=false&access_token=${MAPBOX_API_KEY}`);
       const data = await response.json();
-      setRouteLineString(data.routes[0].geometry);
       if (data.routes[0].distance > routeDistanceMeters) {
         try {
           const scaleResponse = await fetch(`http://127.0.0.1:5000/optimise`, {
@@ -110,7 +95,7 @@ const App = () => {
             })
           });
           const scaledData = await scaleResponse.json();
-          setOptimisedRouteLineString({ 'type': 'LineString', 'coordinates': scaledData.coordinates });
+
           const recalculatePoints = scaledData.recalculatePoints
           try {
             const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/${recalculatePoints}?alternatives=false&geometries=geojson&steps=true&continue_straight=false&access_token=${MAPBOX_API_KEY}`);
@@ -214,12 +199,3 @@ const layerStyles = {
 
 export default App;
 
-/*
-          <MapboxGL.ShapeSource id="origin" shape={routeLineString}>
-            <MapboxGL.LineLayer id="routeFill" style={layerStyles.route} />
-          </MapboxGL.ShapeSource>
-          <MapboxGL.ShapeSource id="optimised" shape={finalLineString}>
-            <MapboxGL.LineLayer id="optimisedLine" style={layerStyles.optimisedRouteLine} />
-          </MapboxGL.ShapeSource>
-
-*/
