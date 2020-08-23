@@ -16,6 +16,8 @@ const fetchRandomPolygonCoords = async (
                 if (isLocationPermissionGranted === true) {
                     const response = await fetch(`http://127.0.0.1:5000/route?longitude=${originLongitude}&latitude=${originLatitude}&routeDistance=${routeDistanceMeters}`);
                     const data = await response.json();
+
+                    // Setting the fetched coordinates in redux state:
                     dispatch(setRandomPolygonCoordinates(data.coordinates))
                     
                     // Returns a URL string of coords for Mapbox API:
@@ -24,7 +26,6 @@ const fetchRandomPolygonCoords = async (
                         coordsURLLst.push(data.coordinates[i].join())
                     };
                     const coordsURLString = coordsURLLst.join(';');
-                    console.log(coordsURLString)
                     return coordsURLString;
                 }
             } catch (err) {

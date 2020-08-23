@@ -19,7 +19,7 @@ MapboxGL.setAccessToken(MAPBOX_API_KEY);
 MapboxGL.setConnected(true);
 
 const App = () => {
-  // Creating dispatch to allow for updating redux state:
+  // Creating dispatch to allow for updating redux store state:
   const dispatch = useDispatch();
     
   // Requesting permission for user location, setting permission true or false in redux state:
@@ -33,7 +33,9 @@ const App = () => {
 
   // Route characteristics that will be rendered to the user: 
   const finalLineString = useSelector(state => state.finalRouteLineString);
-  const [displayRouteDistance, setDisplayRouteDistance] = useState(0);
+  console.log(`The final route line string is...`)
+  console.log(finalLineString);
+  const calcuatedRouteDistance = useSelector(state => state.calcuatedRouteDistance);
 
   return (
     <View style = {styles.page}>
@@ -44,7 +46,7 @@ const App = () => {
           </MapboxGL.ShapeSource>
           <MapboxGL.PointAnnotation id="origin-point" coordinate={[originLongitude, originLatitude]} />
         </MapboxGL.MapView>
-        <RouteInfoCard displayRouteDistance={displayRouteDistance}/>
+        <RouteInfoCard displayRouteDistance={calcuatedRouteDistance}/>
         <Button
             title="Learn More"
             color="#841584"

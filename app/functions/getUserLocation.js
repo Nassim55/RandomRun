@@ -6,7 +6,6 @@ const getUserLocation = async (isLocationPermissionGranted, dispatch) => {
     try {
         if (isLocationPermissionGranted === true) {
             Geolocation.getCurrentPosition(position => {
-                console.log(position)
                 dispatch(setUserLocation([position.coords.longitude, position.coords.latitude]));
             }, 
             err => console.error(err),
