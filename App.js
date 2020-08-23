@@ -1,7 +1,6 @@
-import React, { useState, useEffect } from 'react';
-import { StyleSheet, View, Text, Dimensions, PermissionsAndroid, Button } from 'react-native';
+import React from 'react';
+import { StyleSheet, View, Text, Dimensions } from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
-import { lineString } from '@turf/helpers';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Custom components:
@@ -9,9 +8,8 @@ import RouteInfoCard from './app/components/RouteInfoCard';
 
 // Custom functions:
 import requestLocationPermission from './app/functions/requestLocationPermission';
-import fetchRouteCoords from './app/functions/fetchRouteCoords';
 
-
+// API keys:
 const MAPBOX_API_KEY = 'pk.eyJ1IjoibmFzc2ltY2hlbm91ZiIsImEiOiJja2R1NjE2amMzYnl4MzByb3c5YmxlMGY5In0.cBj3YeAh0UMxinxOfhDLIw';
 
 // Connecting to the Mapbox API:
@@ -37,35 +35,35 @@ const App = () => {
 
   return (
     <View style = {styles.page}>
-      <View style = {styles.container}>
-        <MapboxGL.MapView style = {styles.map} >
-          <MapboxGL.ShapeSource id="optimised" shape={finalLineString}>
-            <MapboxGL.LineLayer id="optimisedLine" style={layerStyles.optimisedRouteLine} />
-          </MapboxGL.ShapeSource>
-          <MapboxGL.PointAnnotation id="origin-point" coordinate={[originLongitude, originLatitude]} />
-        </MapboxGL.MapView>
-        <RouteInfoCard displayRouteDistance={calcuatedRouteDistance}/>
-        <Button
-            title="Learn More"
-            color="#841584"
-            accessibilityLabel="Learn more about this purple button"
-            onPress={() => {
-              fetchRouteCoords( isLocationPermissionGranted, dispatch, originLongitude, originLatitude, routeDistanceMeters)
-            }}
-          />
-      </View>
+      <MapboxGL.MapView style = {styles.map} >
+        <MapboxGL.ShapeSource id="optimised" shape={finalLineString}>
+          <MapboxGL.LineLayer id="optimisedLine" style={layerStyles.optimisedRouteLine} />
+        </MapboxGL.ShapeSource>
+        <MapboxGL.PointAnnotation id="origin-point" coordinate={[originLongitude, originLatitude]} />
+      </MapboxGL.MapView>
+      <RouteInfoCard 
+      isLocationPermissionGranted={isLocationPermissionGranted}
+      originLongitude={originLongitude}
+      originLatitude={originLatitude}
+      routeDistanceMeters={routeDistanceMeters}
+      displayRouteDistance={calcuatedRouteDistance}/>
     </View>
   );
 };
 
 const styles = StyleSheet.create({
-  container: {
+  page: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-    backgroundColor: "tomato"
+
   },
   map: {
-    flex: 1,
+    width: '100%',
+    height: '100%'
   }
 });
 
