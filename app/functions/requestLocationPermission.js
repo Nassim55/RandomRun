@@ -12,13 +12,11 @@ const requestLocationPermission = async (dispatch) => {
         buttonPositive: "OK"
       }
     );
-
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       dispatch(isLocationPermissionGranted(true));
     } else {
       dispatch(isLocationPermissionGranted(false));
     };
-
   } catch (err) {
     if (console) {
       console.error(err);

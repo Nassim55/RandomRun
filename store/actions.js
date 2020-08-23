@@ -2,7 +2,9 @@ import {
     IS_LOCATION_PERMISSION_GRANTED,
     SET_USER_LOCATION,
     SET_ROUTE_DISTANCE_METERS,
-    SET_RANDOM_POLYGON_COORDINATES
+    SET_RANDOM_POLYGON_COORDINATES,
+    SET_FINAL_ROUTE_LINESTRING,
+    SET_CALCULATED_ROUTE_DISTANCE_METERS
 } from './actionTypes';
 
 // We now need to build 'action creators', theses are basically just
@@ -30,3 +32,13 @@ export const setRandomPolygonCoordinates = (randomPolygonCoords) => ({
     type: SET_RANDOM_POLYGON_COORDINATES,
     randomPolygonCoords: {'coordinates': randomPolygonCoords}
 });
+
+export const setFinalRouteLineString = (finalRouteLineString) => ({
+    type: SET_FINAL_ROUTE_LINESTRING,
+    finalRouteLineString: finalRouteLineString
+});
+
+export const setCalculateRouteDistance = (calcuatedRouteDistance) => ({
+    type: SET_CALCULATED_ROUTE_DISTANCE_METERS,
+    calcuatedRouteDistance: calcuatedRouteDistance
+}); 

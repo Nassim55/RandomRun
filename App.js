@@ -31,13 +31,9 @@ const App = () => {
   const originLatitude =  useSelector(state => state.userLatitude);
   const routeDistanceMeters = useSelector(state => state.routeDistanceMeters);
 
-  // Fetch the coordinates for a random polygon from the back-end Python code:
-  const randomRouteCoords = useSelector(state => state.randomPolygonCoords);
-  
-  const [finalLineString, setFinalLineString] = useState({ "type": "LineString", "coordinates": [] });
-  const [displayRouteDistance, setDisplayRouteDistance] = useState(0)
-
-
+  // Route characteristics that will be rendered to the user: 
+  const finalLineString = useSelector(state => state.finalRouteLineString);
+  const [displayRouteDistance, setDisplayRouteDistance] = useState(0);
 
   return (
     <View style = {styles.page}>
