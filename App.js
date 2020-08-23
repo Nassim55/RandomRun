@@ -33,8 +33,6 @@ const App = () => {
 
   // Route characteristics that will be rendered to the user: 
   const finalLineString = useSelector(state => state.finalRouteLineString);
-  console.log(`The final route line string is...`)
-  console.log(finalLineString);
   const calcuatedRouteDistance = useSelector(state => state.calcuatedRouteDistance);
 
   return (
