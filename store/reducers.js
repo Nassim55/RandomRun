@@ -14,7 +14,7 @@ const initialState = {
     userLatitude: 0,
     routeDistanceMeters: 0,
     randomPolygonCoords: { 'coordinates': [] },
-    finalRouteLineString: { 'coordinates': [] },
+    finalRouteLineString: { 'type': 'LineString', 'coordinates': [] },
     calcuatedRouteDistance: 0
 };
 

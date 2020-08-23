@@ -5,9 +5,13 @@ import requestLocationPermission from './requestLocationPermission';
 const getUserLocation = async (isLocationPermissionGranted, dispatch) => {
     try {
         if (isLocationPermissionGranted === true) {
-            Geolocation.getCurrentPosition(info => {
-                dispatch(setUserLocation([info.coords.longitude, info.coords.latitude]));
-            });
+            Geolocation.getCurrentPosition(position => {
+                console.log(position)
+                dispatch(setUserLocation([position.coords.longitude, position.coords.latitude]));
+            }, 
+            err => console.error(err),
+            { enableHighAccuracy: true, timeout: 5000, maximumAge: 0, }
+            );
         } else {
             console.log('Location not granted');
         };
