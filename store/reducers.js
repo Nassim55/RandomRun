@@ -44,7 +44,6 @@ export const reducer = (state = initialState, action) => {
                 randomPolygonCoords: action.randomPolygonCoords
             };
         case SET_FINAL_ROUTE_LINESTRING:
-            console.log(state)
             return {
                 ...state,
                 finalRouteLineString: action.finalRouteLineString

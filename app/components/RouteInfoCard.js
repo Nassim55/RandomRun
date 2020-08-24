@@ -35,7 +35,9 @@ const RouteInfoCard = (props) => {
                 </TouchableOpacity>
             </View>
             <View style = {styles.containerRouteDetails}>
-                <Text>Distance: {(props.displayRouteDistance / 1000).toFixed(2)}km</Text>
+                <Text style = {styles.routeDistance}>
+                    {(props.displayRouteDistance / 1000).toFixed(2)} KM
+                </Text>
             </View>
         </View>
     );
@@ -44,13 +46,16 @@ const RouteInfoCard = (props) => {
 const styles = StyleSheet.create({
     routeDetails: {
         position: 'absolute',
-        bottom: '10%',
+        bottom: '15%',
         display: 'flex',
         flexDirection: 'column',
         width: '90%',
 
     },
     containerRouteDetails: {
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
         backgroundColor: 'white',
         shadowColor: "#000",
         shadowOffset: {
@@ -62,8 +67,11 @@ const styles = StyleSheet.create({
         elevation: 5,
         borderRadius: 10,
         opacity: 0.9,
-        padding: '5%'
+        padding: '2.5%'
 
+    },
+    routeDistance: {
+        fontWeight: '600'
     },
 
     inputAndButtonContainer: {
@@ -84,7 +92,7 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         opacity: 0.9,
         overflow: 'hidden',
-        marginBottom: '5%',
+        marginBottom: '3%',
         paddingLeft: '2%',
     },
     inputDistance: {

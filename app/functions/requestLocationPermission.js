@@ -1,5 +1,6 @@
 import { PermissionsAndroid } from 'react-native';
-import { isLocationPermissionGranted } from '../../store/actions';
+import Geolocation from '@react-native-community/geolocation';
+import { isLocationPermissionGranted, setUserLocation } from '../../store/actions';
 
 const requestLocationPermission = async (dispatch) => {
   try {
@@ -14,6 +15,14 @@ const requestLocationPermission = async (dispatch) => {
     );
     if (granted === PermissionsAndroid.RESULTS.GRANTED) {
       dispatch(isLocationPermissionGranted(true));
+      try {
+          Geolocation.getCurrentPosition(position => {
+              dispatch(setUserLocation([position.coords.longitude, position.coords.latitude]));
+          }, 
+          err => console.error(err),
+          { enableHighAccuracy: true, timeout: 5000, maximumAge: 0, }
+          );
+      } catch (err) { if (console) console.error(err) };
     } else {
       dispatch(isLocationPermissionGranted(false));
     };

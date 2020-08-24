@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useRef, useCallback, useEffect, useLayoutEffect, useState } from 'react';
 import { StyleSheet, View, Text, Dimensions } from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import { useDispatch, useSelector } from 'react-redux';
@@ -21,7 +21,6 @@ const App = () => {
   const dispatch = useDispatch();
     
   // Requesting permission for user location, setting permission true or false in redux state:
-  requestLocationPermission(dispatch);
   const isLocationPermissionGranted = useSelector(state => state.isLocationPermissionGranted);
 
   // Getting route characteristic from redux state:
@@ -33,9 +32,35 @@ const App = () => {
   const finalLineString = useSelector(state => state.finalRouteLineString);
   const calcuatedRouteDistance = useSelector(state => state.calcuatedRouteDistance);
 
+  // Defining Map state:
+  const mapref = useRef(null);
+  const cameraRef = useRef(undefined);
+
+
+  
+  // if (cameraRef.current !== undefined) {
+  //   useLayoutEffect(() => {
+  //     console.log('requestLocatioPermission called');
+  //     requestLocationPermission(dispatch);
+  //     console.log(cameraRef)
+      
+  //     cameraRef.current.flyTo([originLongitude, originLatitude], 2000);
+  //     cameraRef.current.zoomTo(13, 2000);
+  //   }, []);
+  // }
+
+
   return (
     <View style = {styles.page}>
-      <MapboxGL.MapView style = {styles.map} >
+      <MapboxGL.MapView
+      ref = {mapref} 
+      style = {styles.map}
+      pitchEnabled
+      zoomEnabled
+      >
+        <MapboxGL.Camera
+        ref={useCallback((r)=>{ cameraRef.current = r; })}
+        />
         <MapboxGL.ShapeSource id="optimised" shape={finalLineString}>
           <MapboxGL.LineLayer id="optimisedLine" style={layerStyles.optimisedRouteLine} />
         </MapboxGL.ShapeSource>
@@ -81,10 +106,10 @@ const layerStyles = {
     lineOpacity: 0.84,
   },
   optimisedRouteLine: {
-    lineColor: 'green',
+    lineColor: '#F24E4E',
     lineCap: MapboxGL.LineJoin.Round,
-    lineWidth: 2,
-    lineOpacity: 0.84,
+    lineWidth: 5,
+    lineOpacity: 0.5,
   },
 };
 
