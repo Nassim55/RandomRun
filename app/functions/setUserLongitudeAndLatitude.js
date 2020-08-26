@@ -2,7 +2,7 @@ import { PermissionsAndroid } from 'react-native';
 import Geolocation from '@react-native-community/geolocation';
 import { isLocationPermissionGranted, setUserLocation } from '../../store/actions';
 
-const requestLocationPermission = async (dispatch) => {
+const setUserLongitudeAndLatitude = async (dispatch) => {
   try {
     const granted = await PermissionsAndroid.request(
       PermissionsAndroid.PERMISSIONS.ACCESS_FINE_LOCATION, {
@@ -17,7 +17,7 @@ const requestLocationPermission = async (dispatch) => {
       dispatch(isLocationPermissionGranted(true));
       try {
           Geolocation.getCurrentPosition(position => {
-              dispatch(setUserLocation([position.coords.longitude, position.coords.latitude]));
+            dispatch(setUserLocation([position.coords.longitude, position.coords.latitude]));
           }, 
           err => console.error(err),
           { enableHighAccuracy: true, timeout: 5000, maximumAge: 0, }
@@ -33,4 +33,4 @@ const requestLocationPermission = async (dispatch) => {
   };
 };
 
-export default requestLocationPermission;
+export default setUserLongitudeAndLatitude;

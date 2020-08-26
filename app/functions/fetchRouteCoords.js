@@ -22,6 +22,8 @@ const fetchRouteCoords = async (
     const originalMapboxRouteDistanceMeters = data.routes[0].distance;
     const originalMapboxRouteGeometry = data.routes[0].geometry;
     const originalMapboxRouteCoordinates = data.routes[0].geometry.coordinates;
+
+    
     
     // If the route is greater than the desired distance run the optimser, else update the Redux state:
     if (originalMapboxRouteDistanceMeters > routeDistanceMeters) {

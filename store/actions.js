@@ -20,7 +20,8 @@ export const isLocationPermissionGranted = (isLocationPermissionGranted) => ({
 export const setUserLocation = (userLongitudeAndLatitude) => ({
     type: SET_USER_LOCATION,
     userLongitude: userLongitudeAndLatitude[0],
-    userLatitude: userLongitudeAndLatitude[1]
+    userLatitude: userLongitudeAndLatitude[1],
+    userLongitudeAndLatitude: userLongitudeAndLatitude
 });
 
 export const setRouteDistanceMeters = (userInputRouteDistanceMeters) => ({
@@ -38,7 +39,7 @@ export const setFinalRouteLineString = (finalRouteLineString) => ({
     finalRouteLineString: finalRouteLineString
 });
 
-export const setCalculateRouteDistance = (calcuatedRouteDistance) => ({
+export const setCalculateRouteDistance = (calculatedRouteDistance) => ({
     type: SET_CALCULATED_ROUTE_DISTANCE_METERS,
-    calcuatedRouteDistance: calcuatedRouteDistance
+    calculatedRouteDistance: calculatedRouteDistance
 }); 

@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import RouteInfoCard from './app/components/RouteInfoCard';
 
 // Custom functions:
-import requestLocationPermission from './app/functions/requestLocationPermission';
+import setUserLongitudeAndLatitude from './app/functions/setUserLongitudeAndLatitude';
 
 // API keys:
 const MAPBOX_API_KEY = 'pk.eyJ1IjoibmFzc2ltY2hlbm91ZiIsImEiOiJja2R1NjE2amMzYnl4MzByb3c5YmxlMGY5In0.cBj3YeAh0UMxinxOfhDLIw';
@@ -16,7 +16,14 @@ const MAPBOX_API_KEY = 'pk.eyJ1IjoibmFzc2ltY2hlbm91ZiIsImEiOiJja2R1NjE2amMzYnl4M
 MapboxGL.setAccessToken(MAPBOX_API_KEY);
 MapboxGL.setConnected(true);
 
+
+
+
+
+
 const App = () => {
+  console.log('app is rendering');
+
   // Creating dispatch to allow for updating redux store state:
   const dispatch = useDispatch();
     
@@ -30,36 +37,27 @@ const App = () => {
 
   // Route characteristics that will be rendered to the user: 
   const finalLineString = useSelector(state => state.finalRouteLineString);
-  const calcuatedRouteDistance = useSelector(state => state.calcuatedRouteDistance);
-
-  // Defining Map state:
-  const mapref = useRef(null);
-  const cameraRef = useRef(undefined);
+  const calculatedRouteDistance = useSelector(state => state.calculatedRouteDistance);
 
 
-  
-  // if (cameraRef.current !== undefined) {
-  //   useLayoutEffect(() => {
-  //     console.log('requestLocatioPermission called');
-  //     requestLocationPermission(dispatch);
-  //     console.log(cameraRef)
-      
-  //     cameraRef.current.flyTo([originLongitude, originLatitude], 2000);
-  //     cameraRef.current.zoomTo(13, 2000);
-  //   }, []);
-  // }
 
+
+
+  // Requests user location once on initial render:
+  useEffect(() => {
+    setUserLongitudeAndLatitude(dispatch);
+  }, []);
 
   return (
     <View style = {styles.page}>
       <MapboxGL.MapView
-      ref = {mapref} 
       style = {styles.map}
-      pitchEnabled
-      zoomEnabled
       >
         <MapboxGL.Camera
-        ref={useCallback((r)=>{ cameraRef.current = r; })}
+        zoomLevel={13}
+        animationMode={'flyTo'}
+        animationDuration={3000}
+        centerCoordinate={[originLongitude, originLatitude]}
         />
         <MapboxGL.ShapeSource id="optimised" shape={finalLineString}>
           <MapboxGL.LineLayer id="optimisedLine" style={layerStyles.optimisedRouteLine} />
@@ -71,7 +69,8 @@ const App = () => {
       originLongitude={originLongitude}
       originLatitude={originLatitude}
       routeDistanceMeters={routeDistanceMeters}
-      displayRouteDistance={calcuatedRouteDistance}/>
+      displayRouteDistance={calculatedRouteDistance}
+      />
     </View>
   );
 };
@@ -117,3 +116,16 @@ const layerStyles = {
 export default App;
 
 
+
+
+
+  /*
+  if (cameraRef.current) {
+    console.log(cameraRef.current.flyTo)
+    console.log(cameraRef.current.zoomTo)
+    cameraRef.current.flyTo([-1.5545966666666666, 55.01994166666667], 2000);
+    cameraRef.current.zoomTo(13, 2000);
+  } else {
+    console.log('hello')
+  }
+  */

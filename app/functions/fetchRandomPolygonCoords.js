@@ -1,5 +1,5 @@
 import { setRandomPolygonCoordinates } from '../../store/actions';
-import requestLocationPermission from './requestLocationPermission';
+import setUserLongitudeAndLatitude from './setUserLongitudeAndLatitude';
 
 const fetchRandomPolygonCoords = async (
         isLocationPermissionGranted,
@@ -12,7 +12,7 @@ const fetchRandomPolygonCoords = async (
     if (Number.isNaN(routeDistanceMeters) != true) {
         if (routeDistanceMeters > 0) {
             try {
-                await requestLocationPermission(dispatch);
+                await setUserLongitudeAndLatitude(dispatch);
                 if (isLocationPermissionGranted === true) {
                     const response = await fetch(`http://127.0.0.1:5000/route?longitude=${originLongitude}&latitude=${originLatitude}&routeDistance=${routeDistanceMeters}`);
                     const data = await response.json();

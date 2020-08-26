@@ -28,7 +28,8 @@ const RouteInfoCard = (props) => {
                         dispatch,
                         props.originLongitude,
                         props.originLatitude,
-                        props.routeDistanceMeters)
+                        props.routeDistanceMeters
+                    );
                 }}
                 >
                     <Text style= {styles.generateButtonText}>Generate Route</Text>
