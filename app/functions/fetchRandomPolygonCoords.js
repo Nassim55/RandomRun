@@ -1,14 +1,7 @@
 import { setRandomPolygonCoordinates } from '../../store/actions';
 import setUserLongitudeAndLatitude from './setUserLongitudeAndLatitude';
 
-const fetchRandomPolygonCoords = async (
-        isLocationPermissionGranted,
-        dispatch,
-        originLongitude,
-        originLatitude,
-        routeDistanceMeters
-        ) => {
-    
+const fetchRandomPolygonCoords = async (isLocationPermissionGranted, dispatch, originLongitude, originLatitude, routeDistanceMeters) => {
     if (Number.isNaN(routeDistanceMeters) != true) {
         if (routeDistanceMeters > 0) {
             try {

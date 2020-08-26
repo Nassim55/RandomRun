@@ -28,7 +28,9 @@ const RouteInfoCard = (props) => {
                         dispatch,
                         props.originLongitude,
                         props.originLatitude,
-                        props.routeDistanceMeters
+                        props.routeDistanceMeters,
+                        props.mapRef,
+                        props.cameraRef
                     );
                 }}
                 >

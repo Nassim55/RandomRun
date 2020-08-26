@@ -17,10 +17,6 @@ MapboxGL.setAccessToken(MAPBOX_API_KEY);
 MapboxGL.setConnected(true);
 
 
-
-
-
-
 const App = () => {
   console.log('app is rendering');
 
@@ -39,6 +35,10 @@ const App = () => {
   const finalLineString = useSelector(state => state.finalRouteLineString);
   const calculatedRouteDistance = useSelector(state => state.calculatedRouteDistance);
 
+  // Reference to the Mapbox camera, initially undefined until after app renders:
+  const mapRef = useRef(undefined);
+  const cameraRef = useRef(undefined);
+
   // Set user location on initial render:
   useEffect(() => {
     setUserLongitudeAndLatitude(dispatch);
@@ -46,8 +46,15 @@ const App = () => {
 
   return (
     <View style = {styles.page}>
-      <MapboxGL.MapView style = {styles.map}>
+      <MapboxGL.MapView 
+      ref={useCallback((ref) => {
+        mapRef.current = ref
+      })}
+      style = {styles.map}>
         <MapboxGL.Camera
+        ref={useCallback((ref) => {
+          cameraRef.current = ref;
+        }, [])}
         zoomLevel={13}
         animationMode={'flyTo'}
         animationDuration={3000}
@@ -64,6 +71,8 @@ const App = () => {
       originLatitude={originLatitude}
       routeDistanceMeters={routeDistanceMeters}
       displayRouteDistance={calculatedRouteDistance}
+      mapRef={mapRef}
+      cameraRef={cameraRef}
       />
     </View>
   );

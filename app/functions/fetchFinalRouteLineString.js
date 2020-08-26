@@ -1,6 +1,6 @@
 import { setFinalRouteLineString, setCalculateRouteDistance } from '../../store/actions';
 
-const fetchFinalRouteLineString = async (optimisedGapCoordinates, dispatch) => {
+const fetchFinalRouteLineString = async (optimisedGapCoordinates, dispatch, mapRef, cameraRef) => {
     try {
         const response = await fetch('http://127.0.0.1:5000/finilise', 
             {
@@ -17,6 +17,9 @@ const fetchFinalRouteLineString = async (optimisedGapCoordinates, dispatch) => {
 
         dispatch(setFinalRouteLineString({ 'type': 'LineString', 'coordinates': data.coordinates }));
         dispatch(setCalculateRouteDistance(data.distanceMeters));
+
+
+        cameraRef.current.fitBounds(data.mostNorthEastCoordinates, data.mostSouthWestCoordinates, [15, 15, 15, 15], 3000);
 
     } catch (err) { if (console) console.error(err) };
 };
