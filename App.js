@@ -27,32 +27,26 @@ const App = () => {
   // Creating dispatch to allow for updating redux store state:
   const dispatch = useDispatch();
     
-  // Requesting permission for user location, setting permission true or false in redux state:
+  // Has user allowed location permission, true or false:
   const isLocationPermissionGranted = useSelector(state => state.isLocationPermissionGranted);
 
-  // Getting route characteristic from redux state:
+  // Getting input route characteristics from the user:
   const originLongitude = useSelector(state => state.userLongitude);
   const originLatitude =  useSelector(state => state.userLatitude);
   const routeDistanceMeters = useSelector(state => state.routeDistanceMeters);
 
-  // Route characteristics that will be rendered to the user: 
+  // Generated route characteristics that will be rendered to the user: 
   const finalLineString = useSelector(state => state.finalRouteLineString);
   const calculatedRouteDistance = useSelector(state => state.calculatedRouteDistance);
 
-
-
-
-
-  // Requests user location once on initial render:
+  // Set user location on initial render:
   useEffect(() => {
     setUserLongitudeAndLatitude(dispatch);
   }, []);
 
   return (
     <View style = {styles.page}>
-      <MapboxGL.MapView
-      style = {styles.map}
-      >
+      <MapboxGL.MapView style = {styles.map}>
         <MapboxGL.Camera
         zoomLevel={13}
         animationMode={'flyTo'}
