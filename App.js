@@ -39,10 +39,21 @@ const App = () => {
   const mapRef = useRef(undefined);
   const cameraRef = useRef(undefined);
 
+  const mostNorthEasternCoordinates = useSelector(state => state.mostNorthEasternCoordinates);
+  const mostSouthWesternCoordinates = useSelector(state => state.mostSouthWesternCoordinates);
+
   // Set user location on initial render:
   useEffect(() => {
     setUserLongitudeAndLatitude(dispatch);
   }, []);
+
+  const cameraBoundsConfig = {
+    ne: mostNorthEasternCoordinates,
+    sw: mostSouthWesternCoordinates,
+    paddingRight: 20
+  }
+
+  console.log(cameraBoundsConfig)
 
   return (
     <View style = {styles.page}>
@@ -55,10 +66,18 @@ const App = () => {
         ref={useCallback((ref) => {
           cameraRef.current = ref;
         }, [])}
-        zoomLevel={13}
+        //zoomLevel={13}
+        //animationMode={'flyTo'}
+        //animationDuration={3000}
+        //centerCoordinate={[originLongitude, originLatitude]}
+        bounds={cameraBoundsConfig}
+        animationDuration={2000}
         animationMode={'flyTo'}
-        animationDuration={3000}
-        centerCoordinate={[originLongitude, originLatitude]}
+        //paddingLeft={100}
+        //paddingRight={100}
+        //paddingTop={500}
+        //paddingBottom={200}
+        //followUserLocation={true}
         />
         <MapboxGL.ShapeSource id="optimised" shape={finalLineString}>
           <MapboxGL.LineLayer id="optimisedLine" style={layerStyles.optimisedRouteLine} />

@@ -1,6 +1,11 @@
 import fetchRandomPolygonCoords from './fetchRandomPolygonCoords';
 import optimiseMapboxRoute from './optimiseMapboxRoute';
-import { setFinalRouteLineString, setCalculateRouteDistance } from '../../store/actions';
+import { 
+  setFinalRouteLineString,
+  setCalculateRouteDistance,
+  setMostNorthEasternCoordinates,
+  setMostSouthWesternCoordinates
+} from '../../store/actions';
 
 const MAPBOX_API_KEY = 'pk.eyJ1IjoibmFzc2ltY2hlbm91ZiIsImEiOiJja2R1NjE2amMzYnl4MzByb3c5YmxlMGY5In0.cBj3YeAh0UMxinxOfhDLIw';
 
@@ -46,8 +51,11 @@ const fetchRouteCoords = async (
 
         const data = await response.json();
 
-        cameraRef.current.fitBounds(data.mostNorthEastCoordinates, data.mostSouthWestCoordinates, [15, 15, 15, 15], 3000);
-        
+        //cameraRef.current.fitBounds(data.mostNorthEastCoordinates, data.mostSouthWestCoordinates, [50, 50, 50, 50], 1000);
+        console.log([data.mostNorthEastCoordinates, data.mostSouthWestCoordinates])
+
+        dispatch(setMostNorthEasternCoordinates(data.mostNorthEastCoordinates))
+        dispatch(setMostSouthWesternCoordinates(data.mostSouthWestCoordinates))
 
       } catch (err) { if (console) console.error(err) };
     };

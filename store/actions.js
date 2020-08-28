@@ -4,7 +4,9 @@ import {
     SET_ROUTE_DISTANCE_METERS,
     SET_RANDOM_POLYGON_COORDINATES,
     SET_FINAL_ROUTE_LINESTRING,
-    SET_CALCULATED_ROUTE_DISTANCE_METERS
+    SET_CALCULATED_ROUTE_DISTANCE_METERS,
+    SET_MOST_NORTH_EASTERN_COORDINATES,
+    SET_MOST_SOUTH_WESTERN_COORDINATES
 } from './actionTypes';
 
 // We now need to build 'action creators', theses are basically just
@@ -42,4 +44,14 @@ export const setFinalRouteLineString = (finalRouteLineString) => ({
 export const setCalculateRouteDistance = (calculatedRouteDistance) => ({
     type: SET_CALCULATED_ROUTE_DISTANCE_METERS,
     calculatedRouteDistance: calculatedRouteDistance
-}); 
+});
+
+export const setMostNorthEasternCoordinates = (mostNorthEasternCoordinates) => ({
+    type: SET_MOST_NORTH_EASTERN_COORDINATES,
+    mostNorthEasternCoordinates: mostNorthEasternCoordinates
+});
+
+export const setMostSouthWesternCoordinates = (mostSouthWesternCoordinates) => ({
+    type: SET_MOST_SOUTH_WESTERN_COORDINATES,
+    mostSouthWesternCoordinates: mostSouthWesternCoordinates
+});
