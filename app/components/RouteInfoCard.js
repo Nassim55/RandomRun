@@ -1,8 +1,8 @@
 import React from 'react';
-import { StyleSheet, View, Text, TextInput, TouchableOpacity, Button } from 'react-native';
+import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
 
 // Redux state store imports: 
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch } from 'react-redux';
 import { setRouteDistanceMeters } from '../../store/actions';
 
 // Custom functions:
@@ -29,8 +29,6 @@ const RouteInfoCard = (props) => {
                         props.originLongitude,
                         props.originLatitude,
                         props.routeDistanceMeters,
-                        props.mapRef,
-                        props.cameraRef
                     );
                 }}
                 >

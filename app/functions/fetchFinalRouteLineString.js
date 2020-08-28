@@ -5,7 +5,7 @@ import {
     setMostSouthWesternCoordinates
 } from '../../store/actions';
 
-const fetchFinalRouteLineString = async (optimisedGapCoordinates, dispatch, mapRef, cameraRef) => {
+const fetchFinalRouteLineString = async (optimisedGapCoordinates, dispatch) => {
     try {
         const response = await fetch('http://127.0.0.1:5000/finilise', 
             {
@@ -25,10 +25,6 @@ const fetchFinalRouteLineString = async (optimisedGapCoordinates, dispatch, mapR
 
         dispatch(setMostNorthEasternCoordinates(data.mostNorthEastCoordinates))
         dispatch(setMostSouthWesternCoordinates(data.mostSouthWestCoordinates))
-
-
-        //cameraRef.current.fitBounds(data.mostNorthEastCoordinates, data.mostSouthWestCoordinates, [50, 50, 50, 50], 1000);
-        console.log([data.mostNorthEastCoordinates, data.mostSouthWestCoordinates])
 
     } catch (err) { if (console) console.error(err) };
 };

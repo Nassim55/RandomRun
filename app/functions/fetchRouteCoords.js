@@ -9,14 +9,7 @@ import {
 
 const MAPBOX_API_KEY = 'pk.eyJ1IjoibmFzc2ltY2hlbm91ZiIsImEiOiJja2R1NjE2amMzYnl4MzByb3c5YmxlMGY5In0.cBj3YeAh0UMxinxOfhDLIw';
 
-const fetchRouteCoords = async ( 
-  isLocationPermissionGranted,
-  dispatch,
-  originLongitude,
-  originLatitude,
-  routeDistanceMeters,
-  mapRef,
-  cameraRef ) => {
+const fetchRouteCoords = async ( isLocationPermissionGranted, dispatch, originLongitude, originLatitude, routeDistanceMeters) => {
   
   const routeCoordsString = await fetchRandomPolygonCoords( isLocationPermissionGranted, dispatch, originLongitude, originLatitude, routeDistanceMeters);
       
@@ -32,7 +25,7 @@ const fetchRouteCoords = async (
 
     // If the route is greater than the desired distance run the optimser, else update the Redux state:
     if (originalMapboxRouteDistanceMeters > routeDistanceMeters) {
-      const optimisedRoute = await optimiseMapboxRoute(originalMapboxRouteDistanceMeters, originalMapboxRouteCoordinates, dispatch, mapRef, cameraRef);
+      const optimisedRoute = await optimiseMapboxRoute(originalMapboxRouteDistanceMeters, originalMapboxRouteCoordinates, dispatch);
     } else {
       dispatch(setFinalRouteLineString(data.routes[0].geometry));
       dispatch(setCalculateRouteDistance(data.routes[0].distance));
@@ -50,9 +43,6 @@ const fetchRouteCoords = async (
         });
 
         const data = await response.json();
-
-        //cameraRef.current.fitBounds(data.mostNorthEastCoordinates, data.mostSouthWestCoordinates, [50, 50, 50, 50], 1000);
-        console.log([data.mostNorthEastCoordinates, data.mostSouthWestCoordinates])
 
         dispatch(setMostNorthEasternCoordinates(data.mostNorthEastCoordinates))
         dispatch(setMostSouthWesternCoordinates(data.mostSouthWestCoordinates))

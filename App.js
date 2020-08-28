@@ -35,9 +35,7 @@ const App = () => {
   const finalLineString = useSelector(state => state.finalRouteLineString);
   const calculatedRouteDistance = useSelector(state => state.calculatedRouteDistance);
 
-  // Reference to the Mapbox camera, initially undefined until after app renders:
-  const mapRef = useRef(undefined);
-  const cameraRef = useRef(undefined);
+
 
   const mostNorthEasternCoordinates = useSelector(state => state.mostNorthEasternCoordinates);
   const mostSouthWesternCoordinates = useSelector(state => state.mostSouthWesternCoordinates);
@@ -47,37 +45,28 @@ const App = () => {
     setUserLongitudeAndLatitude(dispatch);
   }, []);
 
+  
+
+
   const cameraBoundsConfig = {
     ne: mostNorthEasternCoordinates,
     sw: mostSouthWesternCoordinates,
-    paddingRight: 20
+    paddingRight: 50,
+    paddingLeft: 50,
+    paddingBottom: 250,
+    paddingTop: 50
   }
 
-  console.log(cameraBoundsConfig)
 
   return (
     <View style = {styles.page}>
-      <MapboxGL.MapView 
-      ref={useCallback((ref) => {
-        mapRef.current = ref
-      })}
-      style = {styles.map}>
+      <MapboxGL.MapView style = {styles.map}>
         <MapboxGL.Camera
-        ref={useCallback((ref) => {
-          cameraRef.current = ref;
-        }, [])}
-        //zoomLevel={13}
-        //animationMode={'flyTo'}
-        //animationDuration={3000}
-        //centerCoordinate={[originLongitude, originLatitude]}
-        bounds={cameraBoundsConfig}
         animationDuration={2000}
         animationMode={'flyTo'}
-        //paddingLeft={100}
-        //paddingRight={100}
-        //paddingTop={500}
-        //paddingBottom={200}
-        //followUserLocation={true}
+        {...((mostNorthEasternCoordinates === null || mostSouthWesternCoordinates === null) ? 
+          {centerCoordinate: [originLongitude, originLatitude], zoomLevel: 13} : {bounds: cameraBoundsConfig}
+        )}
         />
         <MapboxGL.ShapeSource id="optimised" shape={finalLineString}>
           <MapboxGL.LineLayer id="optimisedLine" style={layerStyles.optimisedRouteLine} />
@@ -90,8 +79,6 @@ const App = () => {
       originLatitude={originLatitude}
       routeDistanceMeters={routeDistanceMeters}
       displayRouteDistance={calculatedRouteDistance}
-      mapRef={mapRef}
-      cameraRef={cameraRef}
       />
     </View>
   );

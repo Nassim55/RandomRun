@@ -1,6 +1,6 @@
 import fetchRouteCoordsAfterOptimisation from './fetchRouteCoordsAfterOptimisation';
 
-const optimiseMapboxRoute = async (originalMapboxRouteDistanceMeters, originalMapboxRouteCoordinates, dispatch, mapRef, cameraRef) => {
+const optimiseMapboxRoute = async (originalMapboxRouteDistanceMeters, originalMapboxRouteCoordinates, dispatch) => {
     try {
         const response = await fetch(`http://127.0.0.1:5000/optimise`, 
             {
@@ -18,7 +18,7 @@ const optimiseMapboxRoute = async (originalMapboxRouteDistanceMeters, originalMa
         
         const recalculatedPoints = data.recalculatePoints;
 
-        await fetchRouteCoordsAfterOptimisation(originalMapboxRouteDistanceMeters, recalculatedPoints, dispatch, mapRef, cameraRef);
+        await fetchRouteCoordsAfterOptimisation(originalMapboxRouteDistanceMeters, recalculatedPoints, dispatch);
 
     } catch (err) { if (console) console.error(err) };
 };

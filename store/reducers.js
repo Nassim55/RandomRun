@@ -19,8 +19,8 @@ const initialState = {
     randomPolygonCoords: { 'coordinates': [] },
     finalRouteLineString: { 'type': 'LineString', 'coordinates': [] },
     calculatedRouteDistance: 0,
-    mostNorthEasternCoordinates: [2, 1],
-    mostSouthWesternCoordinates: [1, 2]
+    mostNorthEasternCoordinates: null,
+    mostSouthWesternCoordinates: null
 };
 
 // We now describe how our state will be modified when either addition or subtraction is called:
