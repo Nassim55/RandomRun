@@ -1,5 +1,5 @@
-import React, { useRef, useCallback, useEffect, useLayoutEffect, useState } from 'react';
-import { StyleSheet, View, Text, Dimensions } from 'react-native';
+import React, { useEffect } from 'react';
+import { StyleSheet, View, Dimensions } from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import { useDispatch, useSelector } from 'react-redux';
 
@@ -35,19 +35,9 @@ const App = () => {
   const finalLineString = useSelector(state => state.finalRouteLineString);
   const calculatedRouteDistance = useSelector(state => state.calculatedRouteDistance);
 
-
-
+  // Setting the coordinate bounds for use in camera once a route is loaded:
   const mostNorthEasternCoordinates = useSelector(state => state.mostNorthEasternCoordinates);
   const mostSouthWesternCoordinates = useSelector(state => state.mostSouthWesternCoordinates);
-
-  // Set user location on initial render:
-  useEffect(() => {
-    setUserLongitudeAndLatitude(dispatch);
-  }, []);
-
-  
-
-
   const cameraBoundsConfig = {
     ne: mostNorthEasternCoordinates,
     sw: mostSouthWesternCoordinates,
@@ -57,6 +47,10 @@ const App = () => {
     paddingTop: 50
   }
 
+  // Set user location on initial render:
+  useEffect(() => {
+    setUserLongitudeAndLatitude(dispatch);
+  }, []);
 
   return (
     <View style = {styles.page}>
@@ -123,18 +117,3 @@ const layerStyles = {
 
 
 export default App;
-
-
-
-
-
-  /*
-  if (cameraRef.current) {
-    console.log(cameraRef.current.flyTo)
-    console.log(cameraRef.current.zoomTo)
-    cameraRef.current.flyTo([-1.5545966666666666, 55.01994166666667], 2000);
-    cameraRef.current.zoomTo(13, 2000);
-  } else {
-    console.log('hello')
-  }
-  */

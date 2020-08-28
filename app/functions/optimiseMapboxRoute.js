@@ -18,7 +18,7 @@ const optimiseMapboxRoute = async (originalMapboxRouteDistanceMeters, originalMa
         
         const recalculatedPoints = data.recalculatePoints;
 
-        await fetchRouteCoordsAfterOptimisation(originalMapboxRouteDistanceMeters, recalculatedPoints, dispatch);
+        await fetchRouteCoordsAfterOptimisation(recalculatedPoints, dispatch);
 
     } catch (err) { if (console) console.error(err) };
 };
