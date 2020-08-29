@@ -67,7 +67,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
         borderRadius: 10,
-        opacity: 0.9,
+        opacity: 0.8,
         padding: '2.5%'
 
     },
@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
         shadowRadius: 3.84,
         elevation: 5,
         borderRadius: 10,
-        opacity: 0.9,
+        opacity: 0.8,
         overflow: 'hidden',
         marginBottom: '3%',
         paddingLeft: '2%',
@@ -108,9 +108,10 @@ const styles = StyleSheet.create({
         elevation: 8,
         paddingRight: '2%',
         paddingLeft: '2%',
+        opacity: 0.8
     },
     generateButtonText: {
-        color: 'white'
+        color: 'white',
     }
 });
 
