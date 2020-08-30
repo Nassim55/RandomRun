@@ -1,5 +1,6 @@
 import React from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
+import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 
 // Redux state store imports: 
 import { useDispatch } from 'react-redux';
@@ -31,8 +32,10 @@ const RouteInfoCard = (props) => {
                         props.routeDistanceMeters,
                     );
                 }}
-                >
-                    <Text style= {styles.generateButtonText}>Generate Route</Text>
+                >   
+                    
+                    <Text style= {styles.generateButtonText}>Calculate Route</Text>
+                    <SimpleLineIcons name='rocket' size={24} color='white'/>
                 </TouchableOpacity>
             </View>
             <View style = {styles.containerRouteDetails}>
@@ -97,21 +100,23 @@ const styles = StyleSheet.create({
         paddingLeft: '2%',
     },
     inputDistance: {
-        flex: 2,
+        flex: 4,
     },
     generateButton: {
         display: 'flex',
-        flex: 1,
+        flexDirection: 'row',
+        flex: 3,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: '#F24E4E',
         elevation: 8,
-        paddingRight: '2%',
-        paddingLeft: '2%',
+        paddingRight: '3%',
+        paddingLeft: '3%',
         opacity: 0.8
     },
     generateButtonText: {
         color: 'white',
+        marginRight: 10
     }
 });
 

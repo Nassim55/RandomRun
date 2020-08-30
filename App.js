@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { StyleSheet, View, Dimensions, StatusBar  } from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import { useDispatch, useSelector } from 'react-redux';
-import { useSpring, animated } from 'react-spring/native';
+
 
 // Custom components:
 import RouteInfoCard from './app/components/RouteInfoCard';
@@ -19,6 +19,7 @@ const mapboxStyleURL = 'mapbox://styles/nassimchenouf/cke1zrnot0g1619oql47m98cz'
 // Connecting to the Mapbox API:
 MapboxGL.setAccessToken(MAPBOX_API_KEY);
 MapboxGL.setConnected(true);
+
 
 const App = () => {
   console.log('app is rendering');
@@ -68,7 +69,10 @@ const App = () => {
         <MapboxGL.ShapeSource id="optimised" shape={finalLineString}>
           <MapboxGL.LineLayer id="optimisedLine" style={layerStyles.routeLine} />
         </MapboxGL.ShapeSource>
-        <MapboxGL.PointAnnotation id="origin-point" coordinate={[originLongitude, originLatitude]} />
+        <MapboxGL.PointAnnotation 
+        id="origin-point"
+        coordinate={[originLongitude, originLatitude]}
+        />
       </MapboxGL.MapView>
       <RouteInfoCard 
       isLocationPermissionGranted={isLocationPermissionGranted}
@@ -112,8 +116,3 @@ export default App;
 
 
 
-
-/* 
-      <AnimatedUserInfoMenu style={fade}/>
-      <AnimatedHamburgerMenu onPress={() => setIsNavMenuOpen(!isNavMenuOpen)} />
-*/
