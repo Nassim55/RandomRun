@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import React, { useEffect, useState } from 'react';
+import { StyleSheet, View, Dimensions, StatusBar  } from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import { useDispatch, useSelector } from 'react-redux';
+import { useSpring, animated } from 'react-spring/native';
 
 // Custom components:
 import RouteInfoCard from './app/components/RouteInfoCard';
 import UserInfoMenu from './app/components/UserInfoMenu';
+import HamburgerMenu from './app/components/HamburgerMenu';
 
 // Custom functions:
 import setUserLongitudeAndLatitude from './app/functions/setUserLongitudeAndLatitude';
@@ -80,6 +82,7 @@ const App = () => {
   );
 };
 
+
 const styles = StyleSheet.create({
   page: {
     display: 'flex',
@@ -88,7 +91,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
-
   },
   map: {
     width: '100%',
@@ -107,3 +109,11 @@ const layerStyles = {
 
 
 export default App;
+
+
+
+
+/* 
+      <AnimatedUserInfoMenu style={fade}/>
+      <AnimatedHamburgerMenu onPress={() => setIsNavMenuOpen(!isNavMenuOpen)} />
+*/

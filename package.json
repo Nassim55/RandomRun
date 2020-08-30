@@ -15,7 +15,9 @@
     "@react-native-mapbox-gl/maps": "git+https://github.com/react-native-mapbox-gl/maps.git",
     "react": "16.13.1",
     "react-native": "0.63.2",
+    "react-native-vector-icons": "^7.0.0",
     "react-redux": "^7.2.1",
+    "react-spring": "^8.0.27",
     "redux": "^4.0.5"
   },
   "devDependencies": {
