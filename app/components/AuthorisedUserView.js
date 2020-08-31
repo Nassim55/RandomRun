@@ -8,7 +8,7 @@ import RouteInfoCard from './RouteInfoCard';
 import UserInfoMenu from './UserInfoMenu';
 
 const AuthorisedUserView = (props) => {
-  console.log('AuthorisedUserView render');
+  //console.log('AuthorisedUserView render');
 
   // Has user allowed location permission, true or false:
   const isLocationPermissionGranted = useSelector(state => state.isLocationPermissionGranted);

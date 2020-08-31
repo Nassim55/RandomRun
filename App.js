@@ -1,15 +1,23 @@
-import React from 'react';
+import React, { useState }  from 'react';
 import { StyleSheet, View, Dimensions  } from 'react-native';
 
 // Custom components:
+import LoginPageView from './app/components/LoginPageView';
 import AuthorisedUserView from './app/components/AuthorisedUserView';
 
 const App = () => {
   console.log('App render');
+
+  const [userAuthorised, setUserAuthorised] = useState(false);
+
+  console.log(userAuthorised);
   
   return (
-    <View style = {styles.page}>
-      <AuthorisedUserView />
+    <View 
+    style = {styles.page}
+    onTouchStart={() => setUserAuthorised(!userAuthorised)}
+    >
+      <LoginPageView />
     </View>
   );
 };
@@ -26,3 +34,6 @@ const styles = StyleSheet.create({
 });
 
 export default App;
+
+
+// { userAuthorised ? <AuthorisedUserView /> : <LoginPageView /> }

@@ -7,8 +7,8 @@ import { useSpring, animated } from 'react-spring/native';
 
 
 const UserInfoMenu = (props) => {
-    console.log('UserInfoMenu render')
-    
+    //console.log('UserInfoMenu render')
+
     const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
     
     const fade = useSpring({
@@ -18,7 +18,6 @@ const UserInfoMenu = (props) => {
         backgroundColor: isNavMenuOpen ? '#F24E4E' : 'white'
     })
 
-    console.log(isNavMenuOpen)
 
     const AnimatedView = animated(View);
     const AnimatedTouchableOpacity = animated(TouchableOpacity);

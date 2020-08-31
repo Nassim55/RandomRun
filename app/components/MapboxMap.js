@@ -17,8 +17,8 @@ MapboxGL.setAccessToken(MAPBOX_API_KEY);
 MapboxGL.setConnected(true);
 
 const MapboxMap = (props) => {
-    console.log('MapboxMap render')
-    
+    //console.log('MapboxMap render')
+
     // Creating dispatch to allow for updating redux store state:
     const dispatch = useDispatch();
 
