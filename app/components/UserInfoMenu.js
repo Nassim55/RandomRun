@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity, ImagePropTypes } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { useSpring, animated } from 'react-spring/native';
 
@@ -7,6 +7,8 @@ import { useSpring, animated } from 'react-spring/native';
 
 
 const UserInfoMenu = (props) => {
+    console.log('UserInfoMenu render')
+    
     const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
     
     const fade = useSpring({

@@ -27,13 +27,11 @@ const initialState = {
 export const reducer = (state = initialState, action) => {
     switch (action.type)  {
         case IS_LOCATION_PERMISSION_GRANTED:
-            //console.log('IS_LOCATION_PERMISSION_GRANTED')
             return {
                 ...state,
                 isLocationPermissionGranted: action.isLocationPermissionGranted
             };
         case SET_USER_LOCATION:
-            //console.log('SET_USER_LOCATION')
             return {
                 ...state,
                 userLongitude: action.userLongitude,
@@ -41,26 +39,21 @@ export const reducer = (state = initialState, action) => {
                 userLongitudeAndLatitude: action.userLongitudeAndLatitude
             };
         case SET_ROUTE_DISTANCE_METERS:
-            //console.log('SET_ROUTE_DISTANCE_METERS')
-            console.log(state)
             return {
                 ...state,
                 routeDistanceMeters: action.userInputRouteDistanceMeters
             };
         case SET_RANDOM_POLYGON_COORDINATES:
-            //console.log('SET_RANDOM_POLYGON_COORDINATES')
             return { 
                 ...state,
                 randomPolygonCoords: action.randomPolygonCoords
             };
         case SET_FINAL_ROUTE_LINESTRING:
-            //console.log('SET_FINAL_ROUTE_LINESTRING')
             return {
                 ...state,
                 finalRouteLineString: action.finalRouteLineString
             };
         case SET_CALCULATED_ROUTE_DISTANCE_METERS:
-            //console.log('SET_CALCULATED_ROUTE_DISTANCE_METERS')
             return {
                 ...state,
                 calculatedRouteDistance: action.calculatedRouteDistance
