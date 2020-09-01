@@ -8,7 +8,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "android-dev": "adb reverse tcp:5000 tcp:5000"
+    "android-dev": "adb reverse tcp:8000 tcp:8000"
   },
   "dependencies": {
     "@react-native-community/geolocation": "^2.0.2",
@@ -17,6 +17,7 @@
     "react-native": "0.63.2",
     "react-native-vector-icons": "^7.0.0",
     "react-redux": "^7.2.1",
+    "react-router-native": "^5.2.0",
     "react-spring": "^8.0.27",
     "redux": "^4.0.5"
   },

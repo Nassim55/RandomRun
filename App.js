@@ -1,9 +1,11 @@
 import React, { useState }  from 'react';
 import { StyleSheet, View, Dimensions  } from 'react-native';
+import { NativeRouter, Route, Switch } from "react-router-native";
 
 // Custom components:
 import LoginPageView from './app/components/LoginPageView';
 import AuthorisedUserView from './app/components/AuthorisedUserView';
+import PrivateRoute from './app/routes/PrivateRoute';
 
 const App = () => {
   console.log('App render');
@@ -13,12 +15,15 @@ const App = () => {
   console.log(userAuthorised);
   
   return (
-    <View 
-    style = {styles.page}
-    onTouchStart={() => setUserAuthorised(!userAuthorised)}
-    >
-      <LoginPageView />
-    </View>
+    <NativeRouter>
+      <View style = {styles.page} >
+        <Switch>
+          <Route exact path='/' component={LoginPageView} />
+          <PrivateRoute path='/usermap' exact={true} component={AuthorisedUserView} />
+        </Switch>
+      </View>
+    </NativeRouter>
+
   );
 };
 

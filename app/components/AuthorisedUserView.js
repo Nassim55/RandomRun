@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, View  } from 'react-native';
+import { StyleSheet, View, Text  } from 'react-native';
 import { useSelector } from 'react-redux';
+
 
 // Custom components:
 import MapboxMap from './MapboxMap';
@@ -48,6 +49,9 @@ const styles = StyleSheet.create({
       width: '100%',
       height: '100%',
     },
+    link: {
+      position: 'absolute'
+    }
   });
 
 export default AuthorisedUserView;

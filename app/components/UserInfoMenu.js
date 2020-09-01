@@ -2,9 +2,7 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { useSpring, animated } from 'react-spring/native';
-
-
-
+import { Link } from "react-router-native";
 
 const UserInfoMenu = (props) => {
     //console.log('UserInfoMenu render')
@@ -21,6 +19,8 @@ const UserInfoMenu = (props) => {
 
     const AnimatedView = animated(View);
     const AnimatedTouchableOpacity = animated(TouchableOpacity);
+
+    //console.log(isNavMenuOpen)
 
     return (
         <View style={styles.userInfoMenu}>
@@ -45,10 +45,10 @@ const UserInfoMenu = (props) => {
                     <SimpleLineIcons name='chart' size={24} />
                     <Text style={styles.userInfoMenuButtonText}>Stats</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.userInfoMenuButton}>
-                    <SimpleLineIcons name='settings' size={24} />
-                    <Text style={styles.userInfoMenuButtonText}>Settings</Text>
-                </TouchableOpacity>
+                <Link to='/' component={TouchableOpacity} style={styles.userInfoMenuButton}>                
+                    <SimpleLineIcons name='logout' size={24} />
+                    <Text style={styles.userInfoMenuButtonText}>Logout</Text>
+                </Link>
             </AnimatedView>
         </View>
     );
