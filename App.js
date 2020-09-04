@@ -9,10 +9,6 @@ import PrivateRoute from './app/routes/PrivateRoute';
 
 const App = () => {
   console.log('App render');
-
-  const [userAuthorised, setUserAuthorised] = useState(false);
-
-  console.log(userAuthorised);
   
   return (
     <NativeRouter>

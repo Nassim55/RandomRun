@@ -4,9 +4,9 @@ import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { useSpring, animated } from 'react-spring/native';
 import { Link } from "react-router-native";
 
-const UserInfoMenu = (props) => {
-    //console.log('UserInfoMenu render')
+import deleteData from '../authentication/deleteData';
 
+const UserInfoMenu = () => {
     const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
     
     const fade = useSpring({
@@ -16,11 +16,8 @@ const UserInfoMenu = (props) => {
         backgroundColor: isNavMenuOpen ? '#F24E4E' : 'white'
     })
 
-
     const AnimatedView = animated(View);
     const AnimatedTouchableOpacity = animated(TouchableOpacity);
-
-    //console.log(isNavMenuOpen)
 
     return (
         <View style={styles.userInfoMenu}>
@@ -45,7 +42,12 @@ const UserInfoMenu = (props) => {
                     <SimpleLineIcons name='chart' size={24} />
                     <Text style={styles.userInfoMenuButtonText}>Stats</Text>
                 </TouchableOpacity>
-                <Link to='/' component={TouchableOpacity} style={styles.userInfoMenuButton}>                
+                <Link 
+                to='/'
+                component={TouchableOpacity}
+                style={styles.userInfoMenuButton}
+                onPress={deleteData}
+                >                
                     <SimpleLineIcons name='logout' size={24} />
                     <Text style={styles.userInfoMenuButtonText}>Logout</Text>
                 </Link>

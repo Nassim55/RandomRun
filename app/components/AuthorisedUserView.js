@@ -2,11 +2,11 @@ import React from 'react';
 import { StyleSheet, View, Text  } from 'react-native';
 import { useSelector } from 'react-redux';
 
-
 // Custom components:
 import MapboxMap from './MapboxMap';
 import RouteInfoCard from './RouteInfoCard';
 import UserInfoMenu from './UserInfoMenu';
+
 
 const AuthorisedUserView = (props) => {
   //console.log('AuthorisedUserView render');

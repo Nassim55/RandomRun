@@ -5,37 +5,43 @@ import {
     Text,
     TextInput,
     TouchableOpacity,
+    Pressable,
+    AsyncStorage,
 } from 'react-native';
-import { Link } from "react-router-native";
+import { Link, useHistory } from "react-router-native";
+import * as Keychain from 'react-native-keychain';
+
+
+import saveData from '../authentication/saveData';
+import getData from '../authentication/getData';
 
 
 const LoginPageView = () => {
-    const [token, setToken] = useState('');
-    const [userName, setUserName] = useState('');
-    const [userPassword, setUserPassword] = useState('');
-    
-    const userCredentials = {
-        username: userName,
-        password: userPassword,
-    };
+    const history = useHistory();
 
-    console.log(userCredentials);
-    
+    const [username, setUsername] = useState('');
+    const [password, setPassword] = useState('');
 
-    const loginUser = async () => {
+    const userAuthentication = async () => {
         try {
+            // Checking if username and password exist on the server:
             const response = await fetch('http://127.0.0.1:8000/auth/', {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify(userCredentials), 
+                body: JSON.stringify({ username, password }), 
             });
             const data = await response.json();
-            await setToken(data.token)
+            saveData(data.token);
+            // If a valid token is returned push them to the map:
+            if (data.token) {
+                history.push('/usermap');
+            } else {
+                history.push('/');
+            }
         } catch (err) { if (console) console.error(err) }
     };
 
-    console.log(token);
-
+    getData();
 
     return (
         <View style = {styles.pageContent}>
@@ -44,17 +50,19 @@ const LoginPageView = () => {
                 <TextInput
                 style = {styles.userInputForm}
                 placeholder = 'Email Address...'
-                onChangeText={username => setUserName(username)}
+                onChangeText={username => setUsername(username)}
                 />
                 <TextInput
                 style = {styles.userInputForm}
                 placeholder = 'Password...'
                 secureTextEntry={true}
-                onChangeText={password => setUserPassword(password)}
+                onChangeText={password => setPassword(password)}
                 />
-                <Link to='/usermap' component={TouchableOpacity} activeOpacity={0.8}>
+                <Pressable onPress={userAuthentication}>
                     <Text>Login</Text>
-                </Link>
+                </Pressable>
+
+
             </View>
         </View>
     );
@@ -108,4 +116,12 @@ export default LoginPageView;
                     onPress={loginUser}
                     >
                     </TouchableOpacity>
+
+
+
+
+
+                <Link to='/usermap' component={TouchableOpacity} activeOpacity={0.8}>
+                    <Text>Login</Text>
+                </Link>
 */
