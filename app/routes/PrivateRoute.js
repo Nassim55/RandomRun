@@ -1,15 +1,13 @@
 import React from 'react';
 import { Route, Redirect } from 'react-router-native';
-
-import isAuthenticated from '../authentication/isAuthenticated';
+import { useSelector } from 'react-redux';
 
 const PrivateRoute = ({component: Component, ...rest}) => {
-    const isAuth = isAuthenticated();
-    console.log(isAuth)
+    const isUserAuthenticated = useSelector(state => state.isUserAuthenticated);
     return <Route 
     {...rest}
     render={props => (
-        true ? <Component {...props} /> : <Redirect to='/' />
+        isUserAuthenticated ? <Component {...props} /> : <Redirect to='/' />
     )}
     />
 };

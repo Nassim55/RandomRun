@@ -1,47 +1,22 @@
 import React, { useState } from 'react';
-import {
-    StyleSheet,
-    View,
-    Text,
-    TextInput,
-    TouchableOpacity,
-    Pressable,
-    AsyncStorage,
-} from 'react-native';
-import { Link, useHistory } from "react-router-native";
-import * as Keychain from 'react-native-keychain';
+import { StyleSheet, View, Text, TextInput, Pressable } from 'react-native';
+import { useDispatch } from 'react-redux';
+import { useHistory } from "react-router-native";
 
-
-import saveData from '../authentication/saveData';
-import getData from '../authentication/getData';
+// Custom functions:
+import userAuthentication from '../authentication/userAuthentication';
 
 
 const LoginPageView = () => {
+    // Creating dispatch to all updates to redux store:
+    const dispatch = useDispatch();
+
+    // Creating history in order to allow react router re-directs:
     const history = useHistory();
 
+    // Storing user credentials in local state:
     const [username, setUsername] = useState('');
     const [password, setPassword] = useState('');
-
-    const userAuthentication = async () => {
-        try {
-            // Checking if username and password exist on the server:
-            const response = await fetch('http://127.0.0.1:8000/auth/', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ username, password }), 
-            });
-            const data = await response.json();
-            saveData(data.token);
-            // If a valid token is returned push them to the map:
-            if (data.token) {
-                history.push('/usermap');
-            } else {
-                history.push('/');
-            }
-        } catch (err) { if (console) console.error(err) }
-    };
-
-    getData();
 
     return (
         <View style = {styles.pageContent}>
@@ -58,11 +33,9 @@ const LoginPageView = () => {
                 secureTextEntry={true}
                 onChangeText={password => setPassword(password)}
                 />
-                <Pressable onPress={userAuthentication}>
+                <Pressable onPress={() => userAuthentication(username, password, dispatch, history)}>
                     <Text>Login</Text>
                 </Pressable>
-
-
             </View>
         </View>
     );
@@ -102,26 +75,6 @@ const styles = StyleSheet.create({
         opacity: 0.8,
         margin: 5
     },
-    button: {
-    }
   });
 
 export default LoginPageView;
-
-
-
-/*
-                    <TouchableOpacity 
-                    style = {styles.button}
-                    onPress={loginUser}
-                    >
-                    </TouchableOpacity>
-
-
-
-
-
-                <Link to='/usermap' component={TouchableOpacity} activeOpacity={0.8}>
-                    <Text>Login</Text>
-                </Link>
-*/

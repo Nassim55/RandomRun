@@ -1,4 +1,5 @@
-import { 
+import {
+    SET_USER_AUTHENTICATED,
     IS_LOCATION_PERMISSION_GRANTED,
     SET_USER_LOCATION,
     SET_ROUTE_DISTANCE_METERS,
@@ -14,6 +15,11 @@ import {
 // type is called, our reducers know how to modify the state.
 
 // Defining the action type. All an action is, is a function that returns an object:
+export const setUserAuthenticated = (isUserAuthenticated) => ({
+    type: SET_USER_AUTHENTICATED,
+    isUserAuthenticated: isUserAuthenticated
+});
+
 export const isLocationPermissionGranted = (isLocationPermissionGranted) => ({
     type: IS_LOCATION_PERMISSION_GRANTED,
     isLocationPermissionGranted: isLocationPermissionGranted

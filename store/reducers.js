@@ -1,5 +1,6 @@
 // State is being modified in our reducers file
 import { 
+    SET_USER_AUTHENTICATED,
     IS_LOCATION_PERMISSION_GRANTED,
     SET_USER_LOCATION,
     SET_ROUTE_DISTANCE_METERS,
@@ -11,6 +12,7 @@ import {
 } from './actionTypes';
 
 const initialState = {
+    isUserAuthenticated: false,
     isLocationPermissionGranted: false,
     userLongitude: 0,
     userLatitude: 0,
@@ -26,6 +28,11 @@ const initialState = {
 // We now describe how our state will be modified when either addition or subtraction is called:
 export const reducer = (state = initialState, action) => {
     switch (action.type)  {
+        case SET_USER_AUTHENTICATED:
+            return {
+                ...state,
+                isUserAuthenticated: action.isUserAuthenticated
+            };
         case IS_LOCATION_PERMISSION_GRANTED:
             return {
                 ...state,

@@ -3,10 +3,13 @@ import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { useSpring, animated } from 'react-spring/native';
 import { Link } from "react-router-native";
+import { useDispatch } from 'react-redux';
 
 import deleteData from '../authentication/deleteData';
 
 const UserInfoMenu = () => {
+    const dispatch = useDispatch();
+
     const [isNavMenuOpen, setIsNavMenuOpen] = useState(false);
     
     const fade = useSpring({
@@ -46,7 +49,7 @@ const UserInfoMenu = () => {
                 to='/'
                 component={TouchableOpacity}
                 style={styles.userInfoMenuButton}
-                onPress={deleteData}
+                onPress={() => deleteData(dispatch)}
                 >                
                     <SimpleLineIcons name='logout' size={24} />
                     <Text style={styles.userInfoMenuButtonText}>Logout</Text>
