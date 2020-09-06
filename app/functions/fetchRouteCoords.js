@@ -1,56 +1,29 @@
-import fetchRandomPolygonCoords from './fetchRandomPolygonCoords';
-import optimiseMapboxRoute from './optimiseMapboxRoute';
 import { 
   setFinalRouteLineString,
   setCalculateRouteDistance,
   setMostNorthEasternCoordinates,
   setMostSouthWesternCoordinates
 } from '../../store/actions';
-
-const MAPBOX_API_KEY = 'pk.eyJ1IjoibmFzc2ltY2hlbm91ZiIsImEiOiJja2R1NjE2amMzYnl4MzByb3c5YmxlMGY5In0.cBj3YeAh0UMxinxOfhDLIw';
+import setUserLongitudeAndLatitude from './setUserLongitudeAndLatitude';
 
 const fetchRouteCoords = async ( isLocationPermissionGranted, dispatch, originLongitude, originLatitude, routeDistanceMeters) => {
-  
-  const routeCoordsString = await fetchRandomPolygonCoords( isLocationPermissionGranted, dispatch, originLongitude, originLatitude, routeDistanceMeters);
-      
-  try {
-    // Calling Mapbox API for directions to the random latitude and longitude coordinates:
-    const response = await fetch(`https://api.mapbox.com/directions/v5/mapbox/walking/${routeCoordsString}?alternatives=false&geometries=geojson&steps=true&continue_straight=false&access_token=${MAPBOX_API_KEY}`);
-    const data = await response.json();
-    
-    // Defining route characteristics from the returned Mapbox data:
-    const originalMapboxRouteDistanceMeters = data.routes[0].distance;
-    const originalMapboxRouteGeometry = data.routes[0].geometry;
-    const originalMapboxRouteCoordinates = data.routes[0].geometry.coordinates;
+  if (Number.isNaN(routeDistanceMeters) != true) {
+    if (routeDistanceMeters > 0) {
+        try {
+            await setUserLongitudeAndLatitude(dispatch);
+            if (isLocationPermissionGranted === true) {
+                const response = await fetch(`http://127.0.0.1:5000/route?longitude=${originLongitude}&latitude=${originLatitude}&routeDistance=${routeDistanceMeters}`);
+                const data = await response.json();
 
-    // If the route is greater than the desired distance run the optimser, else update the Redux state:
-    if (originalMapboxRouteDistanceMeters > routeDistanceMeters) {
-      await optimiseMapboxRoute(originalMapboxRouteDistanceMeters, originalMapboxRouteCoordinates, dispatch);
-    } else {
-      dispatch(setFinalRouteLineString(data.routes[0].geometry));
-      dispatch(setCalculateRouteDistance(data.routes[0].distance));
+                dispatch(setFinalRouteLineString({ 'type': 'LineString', 'coordinates': data.coordinates }));
+                dispatch(setCalculateRouteDistance(data.distanceMeters));
 
-      try {
-        const response = await fetch(`http://127.0.0.1:5000/routebounds`, 
-        {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-            },
-            body: JSON.stringify({
-                "mapboxRouteCoords": originalMapboxRouteCoordinates
-            })
-        });
-
-        const data = await response.json();
-
-        dispatch(setMostNorthEasternCoordinates(data.mostNorthEastCoordinates))
-        dispatch(setMostSouthWesternCoordinates(data.mostSouthWestCoordinates))
-
-      } catch (err) { if (console) console.error(err) };
+                dispatch(setMostNorthEasternCoordinates(data.mostNorthEastCoordinates));
+                dispatch(setMostSouthWesternCoordinates(data.mostSouthWestCoordinates));
+            }
+        } catch (err) { if (console) console.error(err) };
     };
-
-  } catch (err) { if (console) console.error(err) };
+};
 };
 
 export default fetchRouteCoords;

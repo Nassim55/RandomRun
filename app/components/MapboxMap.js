@@ -42,6 +42,7 @@ const MapboxMap = (props) => {
         setUserLongitudeAndLatitude(dispatch);
     }, []);
 
+    console.log(finalLineString)
 
     return (
         <MapboxGL.MapView style = {styles.map} styleURL={mapboxStyleURL}>

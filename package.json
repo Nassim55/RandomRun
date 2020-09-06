@@ -8,7 +8,7 @@
     "start": "react-native start",
     "test": "jest",
     "lint": "eslint .",
-    "android-dev": "adb reverse tcp:8000 tcp:8000"
+    "android-dev": "adb reverse tcp:5000 tcp:5000"
   },
   "dependencies": {
     "@react-native-community/geolocation": "^2.0.2",
