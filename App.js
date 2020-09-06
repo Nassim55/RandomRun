@@ -29,7 +29,8 @@ const App = () => {
     <NativeRouter>
       <View style = {styles.page} >
         <Switch>
-          <Route exact path='/' component={AuthorisedUserView} />
+          <Route exact path='/' component={LoginPageView} />
+          <PrivateRoute path='/usermap' exact={true} component={AuthorisedUserView} />
         </Switch>
       </View>
     </NativeRouter>
@@ -48,17 +49,3 @@ const styles = StyleSheet.create({
 });
 
 export default App;
-
-
-/* 
-
-<NativeRouter>
-<View style = {styles.page} >
-  <Switch>
-    <Route exact path='/' component={LoginPageView} />
-    <PrivateRoute path='/usermap' exact={true} component={AuthorisedUserView} />
-  </Switch>
-</View>
-</NativeRouter>
-
-*/

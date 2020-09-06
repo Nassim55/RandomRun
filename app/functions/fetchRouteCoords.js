@@ -12,7 +12,7 @@ const fetchRouteCoords = async ( isLocationPermissionGranted, dispatch, originLo
         try {
             await setUserLongitudeAndLatitude(dispatch);
             if (isLocationPermissionGranted === true) {
-                const response = await fetch(`http://127.0.0.1:5000/route?longitude=${originLongitude}&latitude=${originLatitude}&routeDistance=${routeDistanceMeters}`);
+                const response = await fetch(`http://127.0.0.1:8000/api/route?longitude=${originLongitude}&latitude=${originLatitude}&routeDistance=${routeDistanceMeters}`);
                 const data = await response.json();
 
                 dispatch(setFinalRouteLineString({ 'type': 'LineString', 'coordinates': data.coordinates }));
