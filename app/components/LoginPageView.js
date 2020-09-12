@@ -1,15 +1,17 @@
-import React, { useState } from 'react';
-import { StyleSheet, View, Text, Pressable } from 'react-native';
+import React, { useRef, useState } from 'react';
+import { StyleSheet, View, Text, Animated } from 'react-native';
 import { useDispatch } from 'react-redux';
 import { useHistory } from "react-router-native";
 import { TextInput, Button } from 'react-native-paper'
-import { useSpring, animated } from 'react-spring/native';
+
 
 // Custom functions:
 import userAuthentication from '../authentication/userAuthentication';
 
 
 const LoginPageView = () => {
+    console.log('LoginPageView Rendering')
+
     // Creating dispatch to all updates to redux store:
     const dispatch = useDispatch();
 
@@ -22,23 +24,26 @@ const LoginPageView = () => {
 
 
 
-    const [isFlipped, setIsFlipped] = useState(false);
+    const [isSignUp, setIsSignUp] = useState(false);
+    
+    const [translateXAnim] = useState(new Animated.Value(0))
+    const [heightSignUpContainer] = useState(new Animated.Value(230))
 
-    const { translateX, opacity, height1, height2, borderWidth } = useSpring({
-        opacity: isFlipped ? 1 : 0,
-        height1: isFlipped ? '0%' : '50%',
-        height2: isFlipped ? '90%' : '40%',
-        borderWidth: isFlipped ? 0 : 2.5,
-        translateX: isFlipped ? 750 : 0,
-        config: { mass: 12, tension: 500, friction: 80 }
-    });
-
-    console.log(isFlipped)
-
-    const AnimatedView = animated(View);
-    const AnimatedText = animated(Text);
-    const AnimatedTextInput = animated(TextInput);
-    const AnimatedButton = animated(Button);
+    const toggleHandle = () => {
+        setIsSignUp(!isSignUp);
+        console.log(isSignUp)
+        Animated.timing(translateXAnim, {
+            toValue: isSignUp ? 1000 : 0,
+            duration: isSignUp ? 500 : 2000,
+            useNativeDriver: true,
+        }).start();
+        Animated.timing(heightSignUpContainer, {
+            toValue: isSignUp ? 500 : 230,
+            duration: 2000,
+            useNativeDriver: false,
+        }).start();
+    }
+    
 
     return (
         <View style = {styles.pageContent}>
@@ -47,60 +52,76 @@ const LoginPageView = () => {
             </View>
             <View style={styles.cardsContainer}>
                 
-                <AnimatedView 
-                style={[styles.cardLogin, {
-                    height: height1,
-                    transform: [{ translateX: translateX }]
-                }]}
+                <Animated.View
+                style={[styles.cardLogin, {transform: [{ translateX: translateXAnim }]}]}
                 >
-                    <AnimatedText style={styles.welcomeTextTop}>Already have an account?</AnimatedText>
-                    <AnimatedText style={styles.welcomeTextBottom}>Pick up where you left off</AnimatedText>
-                    <AnimatedTextInput
+                    <Text style={styles.welcomeTextTop}>Already have an account?</Text>
+                    <Text style={styles.welcomeTextBottom}>Pick up where you left off</Text>
+                    <TextInput
                     style={styles.inputForm}
                     label="Email"
+                    mode={'outlined'}
                     value={username}
                     onChangeText={username => setUsername(username)}
-                    mode={'outlined'}
                     />
-                    <AnimatedTextInput
+                    <TextInput
                     style={styles.inputForm}
                     label="Password"
-                    value={password}
-                    secureTextEntry={true}
-                    onChangeText={password => setPassword(password)}
                     mode={'outlined'}
+                    secureTextEntry={true}
+                    value={password}
+                    onChangeText={password => setPassword(password)}
                     />
-                    <AnimatedButton
+                    <Button
                     style={styles.loginButton}
                     uppercase={false}
                     icon='login'
                     mode="contained"
-                    onPress={() => userAuthentication(username, password, dispatch, history)}
+                    onPress={() => {     
+                        userAuthentication(username, password, dispatch, history)
+                    }}
                     >
                         Login
-                    </AnimatedButton>
-                </AnimatedView>
-                <AnimatedView style={[styles.cardSignUp, {height: height2}]}>
+                    </Button>
+                </Animated.View>
+                <Animated.View style={[styles.cardSignUp, {height: heightSignUpContainer}]}>
                     <Text style={styles.welcomeTextTop}>New to Random Run?</Text>
                     <Text style={styles.welcomeTextBottom}>Start your adventure now</Text>
-                    <Button
-                    style={styles.loginButton}
-                    uppercase={false}
-                    icon='sign-direction'
-                    mode="outlined"
-                    onPress={() => setIsFlipped(!isFlipped)}
-                    >
-                        Sign Up
-                    </Button>
-                    <Button
-                    style={styles.loginButton}
-                    uppercase={false}
-                    icon='google'
-                    mode='outlined'
-                    >
-                        Sign Up With Google
-                    </Button>
-                </AnimatedView>
+
+                    {
+                        isSignUp ?
+                        <Button
+                        style={styles.loginButton}
+                        uppercase={false}
+                        icon='sign-direction'
+                        mode="outlined"
+                        onPress={toggleHandle}
+                        >
+                            Sign Up
+                        </Button>
+                        :
+                        <View>
+
+                            <Button
+                            style={styles.loginButton}
+                            uppercase={false}
+                            icon='google'
+                            mode='outlined'
+                            >
+                                Sign Up With Google
+                            </Button>
+                            <Button
+                            style={styles.loginButton}
+                            uppercase={false}
+                            icon='sign-direction'
+                            mode="outlined"
+                            onPress={toggleHandle}
+                            >
+                                Sign Up
+                            </Button>
+                        </View>
+                    }
+                </Animated.View>
             </View>
         </View>
     );
@@ -162,6 +183,9 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         padding: 20,
         marginBottom: 35,
+        overflow: 'hidden',
+        backgroundColor: 'white',
+        zIndex: 999,
     },
     welcomeTextTop: {
         fontFamily: 'Raleway-Regular',
@@ -184,4 +208,26 @@ export default LoginPageView;
 
 /*
 
+    const [isFlipped, setIsFlipped] = useState(false);
+
+    const { translateX, opacity, height1, height2, borderWidth } = useSpring({
+        opacity
+        height1: isFlipped ? '0%' : '50%',
+        height2: isFlipped ? '90%' : '40%',
+        borderWidth: isFlipped ? 0 : 2.5,
+        translateX: isFlipped ? 750 : 0,
+        config: { mass: 12, tension: 500, friction: 80 }
+    });
+
+
+
+                style={[styles.cardLogin, {
+                    height: height1,
+                    transform: [{ translateX: translateX }]
+
+
 */
+
+
+
+
