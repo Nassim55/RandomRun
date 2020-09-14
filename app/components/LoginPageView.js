@@ -27,21 +27,15 @@ const LoginPageView = () => {
 
     const [isSignUp, setIsSignUp] = useState(false);
     
-    const [translateXAnim] = useState(new Animated.Value(0))
-    const [heightSignUpContainer] = useState(new Animated.Value(230))
+    const [translateYAnim] = useState(new Animated.Value(0))
 
+    // Change this to interpolate from 0% to 100%
     const toggleHandle = () => {
         setIsSignUp(!isSignUp);
-        console.log(isSignUp)
-        Animated.timing(translateXAnim, {
-            toValue: isSignUp ? 1000 : 0,
-            duration: isSignUp ? 500 : 2000,
+        Animated.timing(translateYAnim, {
+            toValue: isSignUp ? -590 : 0,
+            duration: 1000,
             useNativeDriver: true,
-        }).start();
-        Animated.timing(heightSignUpContainer, {
-            toValue: isSignUp ? 640 : 230,
-            duration: 2000,
-            useNativeDriver: false,
         }).start();
     }
     
@@ -57,13 +51,12 @@ const LoginPageView = () => {
     return (
         <View style = {styles.pageContent}>
             <View style={styles.welcomeContainer}>
-                <Text style={styles.titleText}>Random Run</Text>
+                <Text style={styles.titleText}>
+                    Random Run
+                </Text>
             </View>
-            <View style={styles.cardsContainer}>
-                
-                <Animated.View
-                style={[styles.cardLogin, {transform: [{ translateX: translateXAnim }]}]}
-                >
+            <Animated.View style={[styles.cardsContainer, {transform: [{ translateY: translateYAnim }]}]}>
+                <View style={styles.cardLogin} >
                     <Text style={styles.welcomeTextTop}>Already have an account?</Text>
                     <Text style={styles.welcomeTextBottom}>Pick up where you left off</Text>
                     <TextInput
@@ -90,8 +83,8 @@ const LoginPageView = () => {
                     >
                         Login
                     </Button>
-                </Animated.View>
-                <Animated.View style={[styles.cardSignUp, {height: heightSignUpContainer}]}>
+                </View>
+                <View style={styles.cardSignUp}>
                     <Text style={styles.welcomeTextTop}>New to Random Run?</Text>
                     <Text style={styles.welcomeTextBottom}>Start your adventure now</Text>
                     <Button
@@ -103,36 +96,55 @@ const LoginPageView = () => {
                     >
                         Sign Up
                     </Button>
+                    <Button
+                    style={styles.loginButton}
+                    uppercase={false}
+                    icon='google'
+                    mode="outlined"
+                    onPress={toggleHandle}
+                    >
+                        Sign Up With Google
+                    </Button>
+                </View>
+            </Animated.View>
+            <Animated.View style={[styles.registerCardContainer, {transform: [{ translateY: translateYAnim }]}]}>
+                <View style={styles.cardSignUp}>
+                    <Text 
+                    style={styles.welcomeTextTop}
+                    onPress={toggleHandle}
+                    >
+                        Create your account
+                    </Text>
                     <TextInput
-                    style={styles.inputForm}
+                    style={styles.inputFormRegistration}
                     label="First Name"
                     mode={'outlined'}
                     value={regFirstName}
                     onChangeText={firstName => setRegFirstName(firstName)}
                     />
                     <TextInput
-                    style={styles.inputForm}
+                    style={styles.inputFormRegistration}
                     label="Last Name"
                     mode={'outlined'}
                     value={regLastName}
                     onChangeText={lastName => setRegLastName(lastName)}
                     />
                     <TextInput
-                    style={styles.inputForm}
+                    style={styles.inputFormRegistration}
                     label="Username"
                     mode={'outlined'}
                     value={regUsername}
                     onChangeText={username => setRegUsername(username)}
                     />
                     <TextInput
-                    style={styles.inputForm}
+                    style={styles.inputFormRegistration}
                     label="Email"
                     mode={'outlined'}
                     value={regEmail}
                     onChangeText={email => setRegEmail(email)}
                     />
                     <TextInput
-                    style={styles.inputForm}
+                    style={styles.inputFormRegistration}
                     label="Password"
                     mode={'outlined'}
                     secureTextEntry={true}
@@ -140,7 +152,7 @@ const LoginPageView = () => {
                     onChangeText={password => setRegPassword(password)}
                     />
                     <TextInput
-                    style={styles.inputForm}
+                    style={styles.inputFormRegistration}
                     label="Password2"
                     mode={'outlined'}
                     secureTextEntry={true}
@@ -151,13 +163,13 @@ const LoginPageView = () => {
                     style={styles.loginButton}
                     uppercase={false}
                     icon='sign-direction'
-                    mode="outlined"
+                    mode="contained"
                     onPress={() => registerAccount(regFirstName, regLastName, regUsername, regEmail, regPassword, regPassword2,  dispatch, history)}
                     >
                         Register
                     </Button>
-                </Animated.View>
-            </View>
+                </View>
+            </Animated.View>
         </View>
     );
 };
@@ -185,6 +197,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: '20%',
         width: '100%',
+        backgroundColor: 'white',
+        zIndex: 999
     },
     cardsContainer: {
         display: 'flex',
@@ -192,7 +206,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         height: '80%',
         width: '100%',
-        overflow: 'hidden'
+        overflow: 'hidden',
+    },
+    registerCardContainer: {
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        height: '80%',
+        width: '100%',
+        overflow: 'hidden',
     },
     cardLogin: {
         position: 'absolute',
@@ -205,6 +227,7 @@ const styles = StyleSheet.create({
         borderColor: '#ccc',
         padding: 20,
         marginBottom: 15,
+        backgroundColor: 'white'
     },
     cardSignUp: {
         position: 'absolute',
@@ -220,7 +243,20 @@ const styles = StyleSheet.create({
         marginBottom: 35,
         overflow: 'hidden',
         backgroundColor: 'white',
-        zIndex: 999,
+    },
+    cardSignUpExtended: {
+        position: 'absolute',
+        borderWidth: 2.5,
+        display: 'flex',
+        flexDirection: 'column',
+        width: '85%',
+        borderStyle: 'dashed',
+        borderRadius: 20,
+        borderColor: '#ccc',
+        padding: 20,
+        marginBottom: 35,
+        overflow: 'hidden',
+        backgroundColor: 'white',
     },
     welcomeTextTop: {
         fontFamily: 'Raleway-Regular',
@@ -232,6 +268,9 @@ const styles = StyleSheet.create({
     },
     inputForm: {
         marginTop: 10,
+    },
+    inputFormRegistration: {
+        marginTop: 5,
     },
     loginButton: {
         marginTop: 20
@@ -259,6 +298,19 @@ export default LoginPageView;
                 style={[styles.cardLogin, {
                     height: height1,
                     transform: [{ translateX: translateX }]
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 */
