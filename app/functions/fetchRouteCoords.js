@@ -16,7 +16,7 @@ const fetchRouteCoords = async ( isLocationPermissionGranted, dispatch, originLo
               token = await AsyncStorage.getItem('token');
               if (token) {
                 console.log(token)
-                const response = await fetch(`http://127.0.0.1:8000/api/route?longitude=${originLongitude}&latitude=${originLatitude}&routeDistance=${routeDistanceMeters}`, {
+                const response = await fetch(`http://127.0.0.1:8000/route/getroute?longitude=${originLongitude}&latitude=${originLatitude}&routeDistance=${routeDistanceMeters}`, {
                   method: 'GET',
                   headers: {
                     'Authorization': `Token ${token}`

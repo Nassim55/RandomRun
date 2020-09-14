@@ -11,8 +11,8 @@ import getApiKey from '../functions/getApiKey';
 
 // API key:
 const MAPBOX_API_KEY = 'pk.eyJ1IjoibmFzc2ltY2hlbm91ZiIsImEiOiJja2R1NjE2amMzYnl4MzByb3c5YmxlMGY5In0.cBj3YeAh0UMxinxOfhDLIw';
-const new_key = getApiKey();
-console.log(new_key)
+//const new_key = getApiKey();
+//console.log(new_key)
 
 // Style URL:
 const mapboxStyleURL = 'mapbox://styles/nassimchenouf/cke1zrnot0g1619oql47m98cz';
