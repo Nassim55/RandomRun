@@ -1,6 +1,7 @@
 import React from 'react';
 import { StyleSheet, View, Text, TextInput, TouchableOpacity } from 'react-native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
+import { Button } from 'react-native-paper'
 
 // Redux state store imports: 
 import { useDispatch } from 'react-redux';
@@ -42,6 +43,13 @@ const RouteInfoCard = (props) => {
                 <Text style = {styles.routeDistance}>
                     {(props.displayRouteDistance / 1000).toFixed(2)} KM
                 </Text>
+                <Button
+                uppercase={false}
+                icon='sign-direction'
+                mode="outlined"
+                >
+                    Save this route
+                </Button>
             </View>
         </View>
     );

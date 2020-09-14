@@ -6,6 +6,7 @@ import { TextInput, Button } from 'react-native-paper'
 
 
 // Custom functions:
+import registerAccount from '../authentication/registerAccount';
 import userAuthentication from '../authentication/userAuthentication';
 
 
@@ -38,12 +39,20 @@ const LoginPageView = () => {
             useNativeDriver: true,
         }).start();
         Animated.timing(heightSignUpContainer, {
-            toValue: isSignUp ? 500 : 230,
+            toValue: isSignUp ? 640 : 230,
             duration: 2000,
             useNativeDriver: false,
         }).start();
     }
     
+
+    // State values for registration:
+    const [regFirstName, setRegFirstName] = useState('')
+    const [regLastName, setRegLastName] = useState('')
+    const [regUsername, setRegUsername] = useState('')
+    const [regEmail, setRegEmail] = useState('')
+    const [regPassword, setRegPassword] = useState('')
+    const [regPassword2, setRegPassword2]= useState('')
 
     return (
         <View style = {styles.pageContent}>
@@ -77,9 +86,7 @@ const LoginPageView = () => {
                     uppercase={false}
                     icon='login'
                     mode="contained"
-                    onPress={() => {     
-                        userAuthentication(username, password, dispatch, history)
-                    }}
+                    onPress={() => userAuthentication(username, password, dispatch, history)}
                     >
                         Login
                     </Button>
@@ -87,40 +94,68 @@ const LoginPageView = () => {
                 <Animated.View style={[styles.cardSignUp, {height: heightSignUpContainer}]}>
                     <Text style={styles.welcomeTextTop}>New to Random Run?</Text>
                     <Text style={styles.welcomeTextBottom}>Start your adventure now</Text>
-
-                    {
-                        isSignUp ?
-                        <Button
-                        style={styles.loginButton}
-                        uppercase={false}
-                        icon='sign-direction'
-                        mode="outlined"
-                        onPress={toggleHandle}
-                        >
-                            Sign Up
-                        </Button>
-                        :
-                        <View>
-
-                            <Button
-                            style={styles.loginButton}
-                            uppercase={false}
-                            icon='google'
-                            mode='outlined'
-                            >
-                                Sign Up With Google
-                            </Button>
-                            <Button
-                            style={styles.loginButton}
-                            uppercase={false}
-                            icon='sign-direction'
-                            mode="outlined"
-                            onPress={toggleHandle}
-                            >
-                                Sign Up
-                            </Button>
-                        </View>
-                    }
+                    <Button
+                    style={styles.loginButton}
+                    uppercase={false}
+                    icon='sign-direction'
+                    mode="outlined"
+                    onPress={toggleHandle}
+                    >
+                        Sign Up
+                    </Button>
+                    <TextInput
+                    style={styles.inputForm}
+                    label="First Name"
+                    mode={'outlined'}
+                    value={regFirstName}
+                    onChangeText={firstName => setRegFirstName(firstName)}
+                    />
+                    <TextInput
+                    style={styles.inputForm}
+                    label="Last Name"
+                    mode={'outlined'}
+                    value={regLastName}
+                    onChangeText={lastName => setRegLastName(lastName)}
+                    />
+                    <TextInput
+                    style={styles.inputForm}
+                    label="Username"
+                    mode={'outlined'}
+                    value={regUsername}
+                    onChangeText={username => setRegUsername(username)}
+                    />
+                    <TextInput
+                    style={styles.inputForm}
+                    label="Email"
+                    mode={'outlined'}
+                    value={regEmail}
+                    onChangeText={email => setRegEmail(email)}
+                    />
+                    <TextInput
+                    style={styles.inputForm}
+                    label="Password"
+                    mode={'outlined'}
+                    secureTextEntry={true}
+                    value={regPassword}
+                    onChangeText={password => setRegPassword(password)}
+                    />
+                    <TextInput
+                    style={styles.inputForm}
+                    label="Password2"
+                    mode={'outlined'}
+                    secureTextEntry={true}
+                    value={regPassword2}
+                    onChangeText={password2 => setRegPassword2(password2)}
+                    />
+                    <Button
+                    style={styles.loginButton}
+                    uppercase={false}
+                    icon='sign-direction'
+                    mode="outlined"
+                    onPress={() => registerAccount(regFirstName, regLastName, regUsername, regEmail, regPassword, regPassword2,  dispatch, history)}
+                    >
+                        Register
+                    </Button>
                 </Animated.View>
             </View>
         </View>
