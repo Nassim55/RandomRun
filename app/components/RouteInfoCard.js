@@ -9,6 +9,7 @@ import { setRouteDistanceMeters } from '../../store/actions';
 
 // Custom functions:
 import fetchRouteCoords from '../functions/fetchRouteCoords';
+import saveRoute from '../functions/saveRoute';
 
 const RouteInfoCard = (props) => {
     const dispatch = useDispatch();
@@ -51,6 +52,7 @@ const RouteInfoCard = (props) => {
                     uppercase={false}
                     icon='sign-direction'
                     mode="outlined"
+                    onPress={() => saveRoute(props.displayRouteDistance, finalLineString.coordinates.toString())}
                     >
                         Save this route
                     </Button>
