@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
-import { StyleSheet, View, Text, TouchableOpacity } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity, Pressable  } from 'react-native';
 import SimpleLineIcons from 'react-native-vector-icons/SimpleLineIcons';
 import { useSpring, animated } from 'react-spring/native';
 import { Link } from "react-router-native";
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 
 import deleteData from '../authentication/deleteData';
+
+import { setIsRouteCardsShown } from '../../store/actions';
 
 const UserInfoMenu = () => {
     const dispatch = useDispatch();
@@ -22,6 +24,10 @@ const UserInfoMenu = () => {
     const AnimatedView = animated(View);
     const AnimatedTouchableOpacity = animated(TouchableOpacity);
 
+
+    const isRouteCardsShown = useSelector(state => state.isRouteCardsShown);
+    
+
     return (
         <View style={styles.userInfoMenu}>
             <AnimatedTouchableOpacity style={[styles.hamburgerButton, {...hamburgerColour}]} onPress={() => setIsNavMenuOpen(!isNavMenuOpen)}>
@@ -33,21 +39,20 @@ const UserInfoMenu = () => {
                 }
             </AnimatedTouchableOpacity>
             <AnimatedView style={fade}>
-                <TouchableOpacity style={styles.userInfoMenuButton}>
+                <Pressable style={styles.userInfoMenuButton}>
                     <SimpleLineIcons name='user' size={24} />
                     <Text style={styles.userInfoMenuButtonText}>Profile</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.userInfoMenuButton}>
+                </Pressable>
+                <Pressable 
+                style={styles.userInfoMenuButton}
+                onPress={() => dispatch(setIsRouteCardsShown(!isRouteCardsShown))}
+                >
                     <SimpleLineIcons name='directions' size={24} />
                     <Text style={styles.userInfoMenuButtonText}>Routes</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles.userInfoMenuButton}>
-                    <SimpleLineIcons name='chart' size={24} />
-                    <Text style={styles.userInfoMenuButtonText}>Stats</Text>
-                </TouchableOpacity>
+                </Pressable>
                 <Link 
                 to='/'
-                component={TouchableOpacity}
+                component={Pressable}
                 style={styles.userInfoMenuButton}
                 onPress={() => deleteData(dispatch)}
                 >                

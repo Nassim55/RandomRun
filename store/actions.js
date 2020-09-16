@@ -7,7 +7,8 @@ import {
     SET_FINAL_ROUTE_LINESTRING,
     SET_CALCULATED_ROUTE_DISTANCE_METERS,
     SET_MOST_NORTH_EASTERN_COORDINATES,
-    SET_MOST_SOUTH_WESTERN_COORDINATES
+    SET_MOST_SOUTH_WESTERN_COORDINATES,
+    SET_IS_ROUTE_CARDS_SHOWN
 } from './actionTypes';
 
 // We now need to build 'action creators', theses are basically just
@@ -60,4 +61,9 @@ export const setMostNorthEasternCoordinates = (mostNorthEasternCoordinates) => (
 export const setMostSouthWesternCoordinates = (mostSouthWesternCoordinates) => ({
     type: SET_MOST_SOUTH_WESTERN_COORDINATES,
     mostSouthWesternCoordinates: mostSouthWesternCoordinates
+});
+
+export const setIsRouteCardsShown = (isRouteCardsShown) => ({
+    type: SET_IS_ROUTE_CARDS_SHOWN,
+    isRouteCardsShown: isRouteCardsShown
 });

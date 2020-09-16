@@ -8,7 +8,8 @@ import {
     SET_FINAL_ROUTE_LINESTRING,
     SET_CALCULATED_ROUTE_DISTANCE_METERS,
     SET_MOST_NORTH_EASTERN_COORDINATES,
-    SET_MOST_SOUTH_WESTERN_COORDINATES
+    SET_MOST_SOUTH_WESTERN_COORDINATES,
+    SET_IS_ROUTE_CARDS_SHOWN
 } from './actionTypes';
 
 const initialState = {
@@ -22,7 +23,8 @@ const initialState = {
     finalRouteLineString: { 'type': 'LineString', 'coordinates': [] },
     calculatedRouteDistance: 0,
     mostNorthEasternCoordinates: null,
-    mostSouthWesternCoordinates: null
+    mostSouthWesternCoordinates: null,
+    isRouteCardsShown: false,
 };
 
 // We now describe how our state will be modified when either addition or subtraction is called:
@@ -74,6 +76,11 @@ export const reducer = (state = initialState, action) => {
             return {
                 ...state,
                 mostSouthWesternCoordinates: action.mostSouthWesternCoordinates
+            };
+        case SET_IS_ROUTE_CARDS_SHOWN:
+            return {
+                ...state,
+                isRouteCardsShown: action.isRouteCardsShown
             };
         default:
             return state;

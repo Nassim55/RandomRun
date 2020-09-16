@@ -6,11 +6,10 @@ import { useSelector } from 'react-redux';
 import MapboxMap from './MapboxMap';
 import RouteInfoCard from './RouteInfoCard';
 import UserInfoMenu from './UserInfoMenu';
+import SavedRouteCards from './SavedRouteCards';
 
 
 const AuthorisedUserView = (props) => {
-  //console.log('AuthorisedUserView render');
-
   // Has user allowed location permission, true or false:
   const isLocationPermissionGranted = useSelector(state => state.isLocationPermissionGranted);
 
@@ -21,6 +20,10 @@ const AuthorisedUserView = (props) => {
 
   // Generated route characteristics that will be rendered to the user: 
   const calculatedRouteDistance = useSelector(state => state.calculatedRouteDistance);
+
+  // Getting state to determine if UI components should be rendered:
+  const isRouteCardsShown = useSelector(state => state.isRouteCardsShown);
+  
 
   return (
       <View style = {styles.pageContent}>
@@ -36,6 +39,12 @@ const AuthorisedUserView = (props) => {
           displayRouteDistance={calculatedRouteDistance}
           />
           <UserInfoMenu />
+          {
+            isRouteCardsShown ?
+            <SavedRouteCards />
+            :
+            null
+          }
     </View>
   );
 };
