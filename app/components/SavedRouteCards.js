@@ -1,97 +1,27 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import Animated, { 
-    Clock, 
-    spring,
-    event,
-    Value,
-    cond,
- } from 'react-native-reanimated';
+import Animated, { Clock, spring, event, Value, cond, useCode, startClock, set, block, timing, Easing, eq, add } from 'react-native-reanimated';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
+import { useClock, useValue, usePanGestureHandler, translate, withOffset } from  "react-native-redash/lib/module/v1";
 
-const SavedRouteCards = (props) => {
 
-    console.log(props)
-
-    const translationX = useRef(new Value(0)).current;
-    const translationY = useRef(new Value(0)).current;
-    const scale = useRef(new Value(0.9)).current;
-    const translateYCard2 = useRef(new Value(44)).current;
-
-    const state = new Value(-1);
+import Card from './Card';
 
 
 
-	const onGestureEvent = useCallback(
-		event(
-			[{
-				nativeEvent: {
-					translationX: translationX,
-                    translationY: translationY,
-                    state: state,
-				},
-			}],
-			{ useNativeDriver: true },
-		),
-		[],
-    );
+const SavedRouteCards = () => {
+    //const {gestureHandler, translation, velocity, state} = usePanGestureHandler();
 
-    
-    const interaction = (gestureTranslation, gestureState) => {
-        const start = new Value(0);
-        const dragging = new Value(0);
-        const position = new Value(0);
-      
-        return cond(
-          eq(gestureState, State.ACTIVE),
-          [
-            cond(eq(dragging, 0), [set(dragging, 1), set(start, position)]),
-            set(position, add(start, gestureTranslation)),
-          ],
-          [set(dragging, 0), position]
-        );
-      }
+    // When the gesture starts again we want to start from the last position instead of resetting:
+    //const translateX = withOffset(translation.x, state);
+    //const translateY = withOffset(translation.y, state);
 
 
-
-
-
-    const onHandlerStateChange = e => {
-        
-    }
-
-    
     return (
         <View style={styles.containerSavedRouteCards}>
-            <PanGestureHandler
-            onGestureEvent={onGestureEvent}
-            onHandlerStateChange={onHandlerStateChange}
-            >
-                <Animated.View 
-                style={[styles.savedRouteCards, {
-                    transform: [
-                        { translateX: translationX },
-                        { translateY: translationY },
-                    ]
-                }]}
-                >
-                    <Text>Hello</Text>
-                </Animated.View>
-            </PanGestureHandler>
-            <PanGestureHandler
-            onGestureEvent={onGestureEvent}
-            >
-                <Animated.View 
-                style={[styles.savedRouteCards2, {
-                    transform: [
-                        {scale: scale},
-                        {translateY: translateYCard2},
-                    ]
-                }]}
-                >
-                    <Text>Hello</Text>
-                </Animated.View>
-            </PanGestureHandler>
+            <Card position={1} />
+            <Card position={0.5} />
+            <Card position={0} />
         </View>
     );
 };
@@ -106,24 +36,32 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
         borderWidth: 1,
-    },
-    savedRouteCards: {
-        position: 'absolute',
-        height: '60%',
-        width: '75%',
-        backgroundColor: 'white',
-        borderRadius: 15,
-        borderWidth: 1
-    },
-    savedRouteCards2: {
-        position: 'absolute',
-        height: '60%',
-        width: '75%',
-        backgroundColor: 'white',
-        borderRadius: 15,
-        borderWidth: 1,
-        zIndex: -1,
-    },
+    }
 })
 
 export default SavedRouteCards;
+
+
+
+
+/*
+            <PanGestureHandler {...gestureHandler} >
+                <Animated.View style={[styles.savedRouteCards, { 
+                    transform: [{ translateX }, { translateY }]
+                }]} >
+                    <Text>Hello</Text>
+                </Animated.View>
+            </PanGestureHandler>
+            <PanGestureHandler>
+                <Animated.View 
+                style={[styles.savedRouteCards2, {
+                    transform: [
+                        {scale: 0.9},
+                        {translateY: 44},
+                    ]
+                }]}
+                >
+                    <Text>Hello</Text>
+                </Animated.View>
+            </PanGestureHandler>
+*/
