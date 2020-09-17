@@ -8,7 +8,8 @@ import {
     SET_CALCULATED_ROUTE_DISTANCE_METERS,
     SET_MOST_NORTH_EASTERN_COORDINATES,
     SET_MOST_SOUTH_WESTERN_COORDINATES,
-    SET_IS_ROUTE_CARDS_SHOWN
+    SET_IS_ROUTE_CARDS_SHOWN,
+    SET_SAVED_ROUTES_RESPONSE,
 } from './actionTypes';
 
 // We now need to build 'action creators', theses are basically just
@@ -66,4 +67,9 @@ export const setMostSouthWesternCoordinates = (mostSouthWesternCoordinates) => (
 export const setIsRouteCardsShown = (isRouteCardsShown) => ({
     type: SET_IS_ROUTE_CARDS_SHOWN,
     isRouteCardsShown: isRouteCardsShown
+});
+
+export const setSavedRoutesResponse = (savedRoutesResponse) => ({
+    type: SET_SAVED_ROUTES_RESPONSE,
+    savedRoutesResponse: savedRoutesResponse
 });

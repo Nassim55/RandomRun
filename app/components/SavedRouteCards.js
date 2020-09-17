@@ -3,22 +3,27 @@ import { StyleSheet, View, Text } from 'react-native';
 import Animated, { Clock, spring, event, Value, cond, useCode, startClock, set, block, timing, Easing, eq, add,interpolate, sub } from 'react-native-reanimated';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 import { useClock, useValue, usePanGestureHandler, translate, withOffset, useTransition } from  "react-native-redash/lib/module/v1";
-
+import { useDispatch, useSelector } from 'react-redux';
 
 import Card from './Card';
 
 
-const cards = [
-    { index: 4},
-    { index: 3},
-    { index: 2},
-    { index: 1},
-    { index: 0},
-]
+// const cards = [
+//     { index: 4},
+//     { index: 3},
+//     { index: 2},
+//     { index: 1},
+//     { index: 0},
+// ]
 
-const step = 1 / (cards.length - 1);
+
 
 const SavedRouteCards = () => {
+    const savedRoutesResponse = useSelector(state => state.savedRoutesResponse);
+    const cards = savedRoutesResponse.map((element, index) => ({...element, index})).reverse();
+    const step = 1 / (cards.length - 1);
+
+
     const [currentIndex, setCurrentIndex] = useState(0);
     const aIndex = useTransition(currentIndex);
 
@@ -26,12 +31,13 @@ const SavedRouteCards = () => {
         <View style={styles.containerSavedRouteCards}>
             <View style={styles.darkenMap} />
             {cards.map(
-                ({ index }) =>
+                ({ index, distance }) =>
                     currentIndex < index * step + step && (
                         <Card 
                         key={index}
                         position={sub(index * step, aIndex)}
                         onSwipe={() => setCurrentIndex(prev => prev + step)}
+                        distanceMeters={distance}
                         />
                 )
             )}

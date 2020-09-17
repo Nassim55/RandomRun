@@ -9,6 +9,8 @@ import deleteData from '../authentication/deleteData';
 
 import { setIsRouteCardsShown } from '../../store/actions';
 
+import fetchSavedRoutes from '../functions/fetchSavedRoutes';
+
 const UserInfoMenu = () => {
     const dispatch = useDispatch();
 
@@ -45,7 +47,10 @@ const UserInfoMenu = () => {
                 </Pressable>
                 <Pressable 
                 style={styles.userInfoMenuButton}
-                onPress={() => dispatch(setIsRouteCardsShown(!isRouteCardsShown))}
+                onPress={() => {
+                    dispatch(setIsRouteCardsShown(!isRouteCardsShown));
+                    fetchSavedRoutes(dispatch);
+                }}
                 >
                     <SimpleLineIcons name='directions' size={24} />
                     <Text style={styles.userInfoMenuButtonText}>Routes</Text>

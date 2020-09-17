@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions } from 'react-native';
+import { View, StyleSheet, Dimensions, Text } from 'react-native';
 import { mix, mixColor, usePanGestureHandler, withSpring } from 'react-native-redash/lib/module/v1';
 import Animated, { add } from 'react-native-reanimated';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
@@ -42,7 +42,7 @@ const Card = (props) => {
                     { translateY },
                 ]
             }]} >
-
+                <Text>{props.distanceMeters}</Text>
             </Animated.View>
         </PanGestureHandler>
     );
@@ -55,6 +55,10 @@ const styles = StyleSheet.create({
         width: '75%',
         backgroundColor: 'white',
         borderRadius: 24,
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
     }
 })
 
