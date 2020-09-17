@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
-import { mix, mixColor, usePanGestureHandler, withOffset, withSpring } from 'react-native-redash/lib/module/v1';
+import { mix, mixColor, usePanGestureHandler, withSpring } from 'react-native-redash/lib/module/v1';
 import Animated, { add } from 'react-native-reanimated';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
 
@@ -11,14 +11,20 @@ const height = width * (425 / 294);
 
 
 const Card = (props) => {
-    const backgroundColor = mixColor(props.position, '#C9E9E7', '#74BCB8');
-    const translateYCardOffset = mix(props.position, 0 , -50);
+    const backgroundColor = mixColor(props.position, '#fbd2d2', '#f8a6a6');
+    const translateYCardOffset = mix(props.position, 0 , -55);
     const scale = mix(props.position, 1, 0.9);
 
     const {gestureHandler, translation, velocity, state} = usePanGestureHandler();
 
     // When the gesture starts again we want to start from the last position instead of resetting:
-    const translateX = withSpring({ value: translation.x, velocity: velocity.x, state, snapPoints: [-width, 0, width]});
+    const translateX = withSpring({ 
+        value: translation.x,
+        velocity: velocity.x,
+        state,
+        snapPoints: [-width, 0, width],
+        onSnap: ([x]) => x !== 0 && props.onSwipe(),
+    });
     const translateY = add(
         translateYCardOffset,
         withSpring({ value: translation.y, velocity: velocity.y, state, snapPoints: [0]})
