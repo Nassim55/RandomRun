@@ -75,6 +75,7 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         alignItems: 'center',
         justifyContent: 'space-between',
+        zIndex: 999
     },
     hamburgerButton: {
         display: 'flex',

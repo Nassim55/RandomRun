@@ -31,19 +31,18 @@ const AuthorisedUserView = (props) => {
           originLongitude={originLongitude}
           originLatitude={originLatitude}
           />
-          <RouteInfoCard 
-          isLocationPermissionGranted={isLocationPermissionGranted}
-          originLongitude={originLongitude}
-          originLatitude={originLatitude}
-          routeDistanceMeters={routeDistanceMeters}
-          displayRouteDistance={calculatedRouteDistance}
-          />
           <UserInfoMenu />
           {
             isRouteCardsShown ?
             <SavedRouteCards />
             :
-            null
+            <RouteInfoCard 
+            isLocationPermissionGranted={isLocationPermissionGranted}
+            originLongitude={originLongitude}
+            originLatitude={originLatitude}
+            routeDistanceMeters={routeDistanceMeters}
+            displayRouteDistance={calculatedRouteDistance}
+            />
           }
     </View>
   );
