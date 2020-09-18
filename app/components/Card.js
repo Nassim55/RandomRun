@@ -1,8 +1,10 @@
 import React from 'react';
-import { View, StyleSheet, Dimensions, Text } from 'react-native';
-import { mix, mixColor, usePanGestureHandler, withSpring } from 'react-native-redash/lib/module/v1';
+import { View, StyleSheet, Dimensions, Text, Image } from 'react-native';
+import { mix, mixColor, usePanGestureHandler } from 'react-native-redash/lib/module/v1';
 import Animated, { add } from 'react-native-reanimated';
 import { PanGestureHandler, State } from 'react-native-gesture-handler';
+
+import { useSpring } from './Animations';
 
 const { width: wWidth } = Dimensions.get('window');
 const width = wWidth * 0.75;
@@ -18,16 +20,16 @@ const Card = (props) => {
     const {gestureHandler, translation, velocity, state} = usePanGestureHandler();
 
     // When the gesture starts again we want to start from the last position instead of resetting:
-    const translateX = withSpring({ 
+    const translateX = useSpring({ 
         value: translation.x,
         velocity: velocity.x,
         state,
-        snapPoints: [-width, 0, width],
+        snapPoints: [-wWidth, 0, wWidth],
         onSnap: ([x]) => x !== 0 && props.onSwipe(),
     });
     const translateY = add(
         translateYCardOffset,
-        withSpring({ value: translation.y, velocity: velocity.y, state, snapPoints: [0]})
+        useSpring({ value: translation.y, velocity: velocity.y, state, snapPoints: [0]})
     )
 
     return (
@@ -42,7 +44,19 @@ const Card = (props) => {
                     { translateY },
                 ]
             }]} >
-                <Text>{props.distanceMeters}</Text>
+                
+                <View style={styles.routeImageAndDetailsContainer}>
+                    <Image
+                    style={styles.mapImage}
+                    source={{
+                    uri: 'file:///data/user/0/com.randomrun/cache/ReactNative-snapshot-image6186489199132815136.jpg',
+                    }}
+                    />
+                </View>
+                <Text style={styles.routeDistance}
+                >
+                    {(props.distanceMeters / 1000).toFixed(2)} KM
+                </Text>
             </Animated.View>
         </PanGestureHandler>
     );
@@ -59,6 +73,21 @@ const styles = StyleSheet.create({
         flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+    },
+    routeImageAndDetailsContainer: {
+        height: '100%',
+        width: '100%',
+        borderRadius: 24,
+    },
+    mapImage: {
+        position: 'relative',
+        height: '100%',
+        width: '100%',
+        borderRadius: 24,
+    },
+    routeDistance: {
+        position: 'absolute',
+        bottom: '10%',
     }
 })
 

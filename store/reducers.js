@@ -11,6 +11,7 @@ import {
     SET_MOST_SOUTH_WESTERN_COORDINATES,
     SET_IS_ROUTE_CARDS_SHOWN,
     SET_SAVED_ROUTES_RESPONSE,
+    SET_MAP_IMAGE_URI,
 } from './actionTypes';
 
 const initialState = {
@@ -27,6 +28,7 @@ const initialState = {
     mostSouthWesternCoordinates: null,
     isRouteCardsShown: false,
     savedRoutesResponse: [],
+    mapImageUri: '',
 };
 
 // We now describe how our state will be modified when either addition or subtraction is called:
@@ -89,6 +91,11 @@ export const reducer = (state = initialState, action) => {
                 ...state,
                 savedRoutesResponse: action.savedRoutesResponse
             };
+        case SET_MAP_IMAGE_URI:
+            return {
+                ...state,
+                mapImageUri: mapImageUri
+            }
         default:
             return state;
     }

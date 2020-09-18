@@ -5,16 +5,20 @@ import { Button } from 'react-native-paper'
 
 // Redux state store imports: 
 import { useDispatch, useSelector } from 'react-redux';
-import { setRouteDistanceMeters } from '../../store/actions';
+import { setRouteDistanceMeters, setMapImageUri } from '../../store/actions';
 
 // Custom functions:
 import fetchRouteCoords from '../functions/fetchRouteCoords';
 import saveRoute from '../functions/saveRoute';
+import setUserLongitudeAndLatitude from '../functions/setUserLongitudeAndLatitude';
 
 const RouteInfoCard = (props) => {
     const dispatch = useDispatch();
 
     const finalLineString = useSelector(state => state.finalRouteLineString);
+
+
+    
 
     return (
         <View style={styles.routeDetails}>
@@ -50,9 +54,11 @@ const RouteInfoCard = (props) => {
                     finalLineString.coordinates.length > 0 ?
                     <Button
                     uppercase={false}
-                    icon='sign-direction'
                     mode="outlined"
-                    onPress={() => saveRoute(props.displayRouteDistance, finalLineString.coordinates.toString())}
+                    onPress={async () => {
+                        const mapImageURI = await props.viewShotRef.current.capture();
+                        saveRoute(props.displayRouteDistance, finalLineString.coordinates.toString(), mapImageURI);
+                    }}
                     >
                         Save this route
                     </Button>

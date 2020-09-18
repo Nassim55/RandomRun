@@ -1,20 +1,13 @@
 import React, { useState, useEffect, useRef, useCallback } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import Animated, { Clock, spring, event, Value, cond, useCode, startClock, set, block, timing, Easing, eq, add,interpolate, sub } from 'react-native-reanimated';
-import { PanGestureHandler, State } from 'react-native-gesture-handler';
-import { useClock, useValue, usePanGestureHandler, translate, withOffset, useTransition } from  "react-native-redash/lib/module/v1";
-import { useDispatch, useSelector } from 'react-redux';
 
+// Packages:
+import { sub } from 'react-native-reanimated';
+import { useTransition } from  "react-native-redash/lib/module/v1";
+import { useSelector } from 'react-redux';
+
+// Custom components:
 import Card from './Card';
-
-
-// const cards = [
-//     { index: 4},
-//     { index: 3},
-//     { index: 2},
-//     { index: 1},
-//     { index: 0},
-// ]
 
 
 

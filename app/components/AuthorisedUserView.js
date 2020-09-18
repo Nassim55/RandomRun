@@ -1,6 +1,7 @@
-import React from 'react';
+import React, { useRef } from 'react';
 import { StyleSheet, View, Text  } from 'react-native';
 import { useSelector } from 'react-redux';
+import ViewShot from "react-native-view-shot";
 
 // Custom components:
 import MapboxMap from './MapboxMap';
@@ -10,6 +11,9 @@ import SavedRouteCards from './SavedRouteCards';
 
 
 const AuthorisedUserView = (props) => {
+  // Reference to the view shot:
+  const viewShotRef = useRef(null);
+
   // Has user allowed location permission, true or false:
   const isLocationPermissionGranted = useSelector(state => state.isLocationPermissionGranted);
 
@@ -23,9 +27,13 @@ const AuthorisedUserView = (props) => {
 
   // Getting state to determine if UI components should be rendered:
   const isRouteCardsShown = useSelector(state => state.isRouteCardsShown);
-  
 
   return (
+    <ViewShot
+    style={styles.viewshot}
+    ref={viewShotRef}
+    options={{ format: "jpg", quality: 0.9 }}
+    >
       <View style = {styles.pageContent}>
           <MapboxMap
           originLongitude={originLongitude}
@@ -42,24 +50,30 @@ const AuthorisedUserView = (props) => {
             originLatitude={originLatitude}
             routeDistanceMeters={routeDistanceMeters}
             displayRouteDistance={calculatedRouteDistance}
+            viewShotRef={viewShotRef}
             />
           }
-    </View>
+      </View>
+    </ViewShot>
   );
 };
 
 const styles = StyleSheet.create({
-    pageContent: {
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      width: '100%',
-      height: '100%',
-    },
-    link: {
-      position: 'absolute'
-    }
-  });
+  viewshot: {
+    width: '100%',
+    height: '100%',
+  },
+  pageContent: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '100%',
+    height: '100%',
+  },
+  link: {
+    position: 'absolute'
+  }
+});
 
 export default AuthorisedUserView;

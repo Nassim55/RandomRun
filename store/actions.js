@@ -10,6 +10,7 @@ import {
     SET_MOST_SOUTH_WESTERN_COORDINATES,
     SET_IS_ROUTE_CARDS_SHOWN,
     SET_SAVED_ROUTES_RESPONSE,
+    SET_MAP_IMAGE_URI
 } from './actionTypes';
 
 // We now need to build 'action creators', theses are basically just
@@ -73,3 +74,8 @@ export const setSavedRoutesResponse = (savedRoutesResponse) => ({
     type: SET_SAVED_ROUTES_RESPONSE,
     savedRoutesResponse: savedRoutesResponse
 });
+
+export const setMapImageUri = (mapImageUri) => ({
+    type: SET_MAP_IMAGE_URI,
+    mapImageUri: mapImageUri
+})

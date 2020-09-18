@@ -3,6 +3,7 @@ import { StyleSheet } from 'react-native';
 import MapboxGL from '@react-native-mapbox-gl/maps';
 import { useDispatch, useSelector } from 'react-redux';
 
+
 // Custom functions:
 import setUserLongitudeAndLatitude from '../functions/setUserLongitudeAndLatitude';
 import getApiKey from '../functions/getApiKey';
@@ -47,6 +48,8 @@ const MapboxMap = (props) => {
         setUserLongitudeAndLatitude(dispatch);
     }, []);
 
+
+
     return (
         <MapboxGL.MapView style = {styles.map} styleURL={mapboxStyleURL}>
             <MapboxGL.Camera
@@ -68,6 +71,7 @@ const MapboxMap = (props) => {
 };
 
 const styles = StyleSheet.create({
+
     map: {
         width: '100%',
         height: '100%'
